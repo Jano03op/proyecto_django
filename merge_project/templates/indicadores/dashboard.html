@@ -1,0 +1,40 @@
+{% extends "organizacion/base_app.html" %}
+{% load static %}
+{% block title %}Indicadores - Sistema SGR{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb-sgr">
+    <span class="current">Medición</span>
+    <span class="sep">/</span>
+    <span class="current">Indicadores</span>
+</nav>
+
+<div class="page-header">
+    <div>
+        <h1>Dashboard general</h1>
+        <p>Período {{ periodo.inicio }} — {{ periodo.termino }}</p>
+    </div>
+</div>
+
+{% for persona in personas %}
+<div class="card-sgr mb-3" style="width: 100%; max-width: 500px;">
+    <div class="card-body">
+        <h5 class="card-title">{{ persona.nombre }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ persona.cargo }}</h6>
+
+        <hr>
+
+        <ul class="list-group list-group-flush">
+            {% for item in persona.items %}
+            <li class="list-group-item d-flex justify-content-between">
+                <span>{{ item.nombre }}</span>
+                <span>{{ item.avance }} / {{ item.meta }}</span>
+                <span>Ponderador : {{ item.ponderador }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
