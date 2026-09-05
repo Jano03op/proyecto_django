@@ -18,5 +18,9 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 urlpatterns = [
-    path('progreso/', views.dashboard, name='dashboard')
+    path('progreso/', views.dashboard, name='dashboard'),
+    path('indicador/', views.logueo, name='logueo'),
+    path('', views.landing, name='landing'),
+    path('resetear/', views.resetear, name='resetear'),
+    path('mi-cuenta/', views.mi_cuenta, name='mi_cuenta'),
 ]
