@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Registrar Nueva Actividad — Sistema SGR{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <!-- Encabezado -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="h3 mb-1 fw-bold text-dark">Registrar Actividad Diaria</h2>
+                <p class="text-muted mb-0">Autoregistro de labores con generación automática de código de evidencia.</p>
+            </div>
+            <a href="{% url 'panel_admin' %}" class="btn btn-outline-secondary">
+                Volver al panel
+            </a>
+        </div>
+
+        <!-- Tarjeta del Formulario -->
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <form method="POST" action="{% url 'registrar_actividad' %}">
+                    {% csrf_token %}
+
+                    <div class="row g-3">
+                        <!-- Fecha -->
+                        <div class="col-md-6">
+                            <label for="fecha" class="form-label fw-semibold">Fecha de la Actividad <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="fecha" name="fecha" required>
+                        </div>
+
+                        <!-- Delegación -->
+                        <div class="col-md-6">
+                            <label for="delegacion" class="form-label fw-semibold">Delegación Territorial <span class="text-danger">*</span></label>
+                            <select class="form-select" id="delegacion" name="delegacion" required>
+                                <option value="" selected disabled>Seleccione una delegación...</option>
+                                <option value="La Antena">La Antena</option>
+                                <option value="Las Compañías">Las Compañías</option>
+                                <option value="La Pampa">La Pampa</option>
+                                <option value="Avenida del Mar">Avenida del Mar</option>
+                                <option value="Centro">Centro</option>
+                                <option value="Rural">Rural</option>
+                            </select>
+                        </div>
+
+                        <!-- Funcionario -->
+                        <div class="col-md-6">
+                            <label for="funcionario" class="form-label fw-semibold">Funcionario Responsable <span class="text-danger">*</span></label>
+                            <select class="form-select" id="funcionario" name="funcionario" required>
+                                <option value="" selected disabled>Seleccione funcionario...</option>
+                                <option value="Elizabeth Villanueva">Elizabeth Villanueva (Delegada - La Antena)</option>
+                                <option value="Pablo Cuadra Corrales">Pablo Cuadra Corrales (Encargado - Las Compañías)</option>
+                                <option value="María Soledad Rojas">María Soledad Rojas (Encargada - La Pampa)</option>
+                                <option value="Rodrigo Fuenzalida Vásquez">Rodrigo Fuenzalida Vásquez (Encargado - Av. del Mar)</option>
+                                <option value="Manuel Barraza Delgado">Manuel Barraza Delgado (Encargado - Rural)</option>
+                                <option value="Alan Von Kretschmann">Alan Von Kretschmann (Coordinador - Centro)</option>
+                            </select>
+                        </div>
+
+                        <!-- Ítem Medible -->
+                        <div class="col-md-6">
+                            <label for="item" class="form-label fw-semibold">Ítem Medible Asociado <span class="text-danger">*</span></label>
+                            <select class="form-select" id="item" name="item" required>
+                                <option value="" selected disabled>Seleccione ítem...</option>
+                                <option value="Atención de usuario">Atención de usuario</option>
+                                <option value="Visitas y reuniones">Visitas y reuniones</option>
+                                <option value="Gestión comunitaria">Gestión comunitaria</option>
+                                <option value="Orientación de subsidios">Orientación de subsidios</option>
+                                <option value="Coordinación estacional">Coordinación estacional</option>
+                                <option value="Acercamiento de servicios">Acercamiento de servicios</option>
+                                <option value="Atención territorial">Atención territorial</option>
+                                <option value="Gestión del espacio público">Gestión del espacio público</option>
+                                <option value="Operativos municipales">Operativos municipales</option>
+                            </select>
+                        </div>
+
+                        <!-- Descripción de la actividad -->
+                        <div class="col-12">
+                            <label for="descripcion" class="form-label fw-semibold">Descripción del Problema o Solicitud <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" placeholder="Detalle la situación o requerimiento atendido..." required></textarea>
+                        </div>
+
+                        <!-- Acción ejecutada -->
+                        <div class="col-12">
+                            <label for="accion" class="form-label fw-semibold">Acción Ejecutada <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="accion" name="accion" placeholder="Ej: Levantamiento en terreno, derivación a departamento social, etc." required>
+                        </div>
+
+                        <!-- Datos del contacto ciudadano -->
+                        <div class="col-md-6">
+                            <label for="contacto" class="form-label fw-semibold">Nombre del Contacto / Ciudadano</label>
+                            <input type="text" class="form-control" id="contacto" name="contacto" placeholder="Nombre completo o institución">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="telefono" class="form-label fw-semibold">Teléfono de Contacto</label>
+                            <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="+56 9 1234 5678">
+                        </div>
+
+                        <!-- Nota informativa sobre evidencia -->
+                        <div class="col-12">
+                            <div class="alert alert-light border d-flex align-items-center gap-2 mb-0" role="alert">
+                                <div>
+                                    <small class="text-muted">
+                                        <strong>Nota sobre la evidencia:</strong> Al guardar la actividad, el sistema generará de forma automática el código verificador único (ej: <code>EVI-ANT-00X</code>) y el registro quedará con estado <strong>Pendiente</strong> a la espera de la validación de coordinación.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="col-12 d-flex justify-content-end gap-2 pt-2">
+                            <a href="{% url 'panel_admin' %}" class="btn btn-outline-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold">Guardar Actividad</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Asigna automáticamente la fecha de hoy por defecto si está vacío
+    document.addEventListener('DOMContentLoaded', function() {
+        const fechaInput = document.getElementById('fecha');
+        if (fechaInput && !fechaInput.value) {
+            fechaInput.value = new Date().toISOString().split('T')[0];
+        }
+    });
+</script>
+{% endblock %}

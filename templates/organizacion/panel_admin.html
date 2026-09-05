@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Consolidado General de Actividades — Sistema SGR{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h2 class="h3 mb-1 fw-bold text-dark">Consolidado General de Actividades</h2>
+        <p class="text-muted mb-0">Supervisión y control de evidencias registradas en las 6 delegaciones territoriales.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'panel_funcionario' %}" class="btn btn-outline-secondary">
+            Ver Mis Actividades
+        </a>
+        <a href="{% url 'registrar_actividad' %}" class="btn btn-primary">
+            + Nueva Actividad
+        </a>
+    </div>
+</div>
+
+<!-- Filtros de búsqueda -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body bg-white rounded">
+        <form method="GET" action="{% url 'panel_admin' %}" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="delegacion" class="form-label fw-semibold small text-secondary">Delegación</label>
+                <select name="delegacion" id="delegacion" class="form-select">
+                    <option value="">-- Todas las delegaciones --</option>
+                    <option value="La Antena" {% if filtro_delegacion == 'La Antena' %}selected{% endif %}>La Antena</option>
+                    <option value="Las Compañías" {% if filtro_delegacion == 'Las Compañías' %}selected{% endif %}>Las Compañías</option>
+                    <option value="La Pampa" {% if filtro_delegacion == 'La Pampa' %}selected{% endif %}>La Pampa</option>
+                    <option value="Avenida del Mar" {% if filtro_delegacion == 'Avenida del Mar' %}selected{% endif %}>Avenida del Mar</option>
+                    <option value="Centro" {% if filtro_delegacion == 'Centro' %}selected{% endif %}>Centro</option>
+                    <option value="Rural" {% if filtro_delegacion == 'Rural' %}selected{% endif %}>Rural</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label for="estado" class="form-label fw-semibold small text-secondary">Estado Evidencia</label>
+                <select name="estado" id="estado" class="form-select">
+                    <option value="">-- Todos los estados --</option>
+                    <option value="Pendiente" {% if filtro_estado == 'Pendiente' %}selected{% endif %}>Pendiente</option>
+                    <option value="Aprobado" {% if filtro_estado == 'Aprobado' %}selected{% endif %}>Aprobado</option>
+                    <option value="Rechazado" {% if filtro_estado == 'Rechazado' %}selected{% endif %}>Rechazado</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label for="funcionario" class="form-label fw-semibold small text-secondary">Funcionario</label>
+                <input type="text" name="funcionario" id="funcionario" class="form-control" placeholder="Buscar por nombre..." value="{{ filtro_funcionario }}">
+            </div>
+
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-dark w-100">Filtrar</button>
+                <a href="{% url 'panel_admin' %}" class="btn btn-outline-secondary" title="Limpiar filtros">Limpiar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tabla de actividades -->
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">Registros del Período</h5>
+        <span class="badge bg-secondary">{{ actividades|length }} registros encontrados</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col" style="width: 80px;">ID / Fecha</th>
+                    <th scope="col">Funcionario</th>
+                    <th scope="col">Delegación</th>
+                    <th scope="col">Ítem Medible</th>
+                    <th scope="col" style="min-width: 250px;">Descripción y Acción</th>
+                    <th scope="col">Evidencia</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col" class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for act in actividades %}
+                <tr>
+                    <td>
+                        <strong class="text-dark">#{{ act.id }}</strong>
+                        <br>
+                        <small class="text-muted">{{ act.fecha }}</small>
+                    </td>
+                    <td>
+                        <span class="fw-semibold">{{ act.funcionario }}</span>
+                        {% if act.contacto %}
+                        <br><small class="text-muted">Contacto: {{ act.contacto }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge bg-light text-dark border">{{ act.delegacion }}</span>
+                    </td>
+                    <td>
+                        <span class="badge text-bg-info bg-opacity-10 text-primary border border-info border-opacity-25">
+                            {{ act.item }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="small fw-medium text-dark">{{ act.descripcion }}</div>
+                        <div class="small text-muted mt-1"><em>Acción:</em> {{ act.accion }}</div>
+                    </td>
+                    <td>
+                        <span class="font-monospace small bg-light p-1 border rounded d-inline-block mb-1">
+                            {{ act.evidencia.codigo }}
+                        </span>
+                        {% if act.evidencia.archivo %}
+                        <div>
+                            <img src="{% static act.evidencia.archivo %}" alt="Evidencia #{{ act.id }}" class="img-thumbnail" style="width: 50px; height: 38px; object-fit: cover;">
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if act.evidencia.estado == 'Aprobado' %}
+                            <span class="badge bg-success">Aprobado</span>
+                        {% elif act.evidencia.estado == 'Pendiente' %}
+                            <span class="badge bg-warning text-dark">Pendiente</span>
+                        {% elif act.evidencia.estado == 'Rechazado' %}
+                            <span class="badge bg-danger">Rechazado</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ act.evidencia.estado }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <a href="{% url 'validar_evidencia' act.id %}" class="btn btn-sm btn-outline-primary">
+                            Revisar
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-5 text-muted">
+                        <p class="mb-1">No se encontraron actividades registradas con los filtros seleccionados.</p>
+                        <a href="{% url 'panel_admin' %}" class="small">Restablecer filtros</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
