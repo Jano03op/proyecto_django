@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mis Actividades — {{ funcionario_actual }} — Sistema SGR{% endblock %}
+
+{% block content %}
+<!-- Encabezado con selector de funcionario y botón de acción -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h2 class="h3 mb-1 fw-bold text-dark">Mis Actividades Diarias</h2>
+        <p class="text-muted mb-0">Vista operativa personal del funcionario.</p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <form method="GET" action="{% url 'panel_funcionario' %}" class="d-flex align-items-center gap-2">
+            <label for="funcionarioSelect" class="small fw-semibold text-secondary text-nowrap">Ver como:</label>
+            <select name="funcionario" id="funcionarioSelect" class="form-select form-select-sm" onchange="this.form.submit()">
+                <option value="Elizabeth Villanueva" {% if funcionario_actual == 'Elizabeth Villanueva' %}selected{% endif %}>Elizabeth Villanueva (La Antena)</option>
+                <option value="Pablo Cuadra Corrales" {% if funcionario_actual == 'Pablo Cuadra Corrales' %}selected{% endif %}>Pablo Cuadra (Las Compañías)</option>
+                <option value="María Soledad Rojas" {% if funcionario_actual == 'María Soledad Rojas' %}selected{% endif %}>María Soledad Rojas (La Pampa)</option>
+                <option value="Rodrigo Fuenzalida Vásquez" {% if funcionario_actual == 'Rodrigo Fuenzalida Vásquez' %}selected{% endif %}>Rodrigo Fuenzalida (Av. del Mar)</option>
+                <option value="Manuel Barraza Delgado" {% if funcionario_actual == 'Manuel Barraza Delgado' %}selected{% endif %}>Manuel Barraza (Rural)</option>
+                <option value="Alan Von Kretschmann" {% if funcionario_actual == 'Alan Von Kretschmann' %}selected{% endif %}>Alan Von Kretschmann (Centro)</option>
+            </select>
+        </form>
+        <a href="{% url 'registrar_actividad' %}" class="btn btn-primary btn-sm px-3 fw-semibold">
+            + Nueva Actividad
+        </a>
+    </div>
+</div>
+
+<!-- Ficha de resumen del funcionario -->
+<div class="card shadow-sm border-0 mb-4 bg-white">
+    <div class="card-body p-3">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="mb-1 fw-bold text-dark">{{ funcionario_actual }}</h5>
+                <span class="badge bg-light text-dark border">
+                    {% if actividades %}{{ actividades.0.delegacion }}{% else %}Delegación Municipal{% endif %}
+                </span>
+                <span class="text-muted small ms-2">Período Julio - Septiembre 2026</span>
+            </div>
+            <div class="col-md-6 mt-3 mt-md-0 d-flex justify-content-md-end gap-3 text-center">
+                <div class="px-3 border-end">
+                    <div class="h5 mb-0 fw-bold text-dark">{{ actividades|length }}</div>
+                    <small class="text-muted">Total Registros</small>
+                </div>
+                <div class="px-3">
+                    <a href="{% url 'dashboard' %}" class="btn btn-outline-info btn-sm mt-1">
+                        Ver Mi Semáforo &rarr;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabla de actividades del funcionario -->
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">Historial de Actividades Propias</h5>
+        <span class="badge bg-secondary">{{ actividades|length }} actividades</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col" style="width: 100px;">Fecha</th>
+                    <th scope="col">Ítem Medible</th>
+                    <th scope="col">Descripción y Acción</th>
+                    <th scope="col">Contacto</th>
+                    <th scope="col">Evidencia</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col" style="min-width: 200px;">Observación de Validación</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for act in actividades %}
+                <tr>
+                    <td>
+                        <span class="fw-semibold text-dark">{{ act.fecha }}</span>
+                        <br>
+                        <small class="text-muted">ID: #{{ act.id }}</small>
+                    </td>
+                    <td>
+                        <span class="badge text-bg-info bg-opacity-10 text-primary border border-info border-opacity-25">
+                            {{ act.item }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="small fw-medium text-dark">{{ act.descripcion }}</div>
+                        <div class="small text-muted mt-1"><em>Acción:</em> {{ act.accion }}</div>
+                    </td>
+                    <td>
+                        <small class="text-dark">{{ act.contacto|default:"-" }}</small>
+                        {% if act.telefono %}
+                        <br><small class="text-muted">{{ act.telefono }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="font-monospace small bg-light p-1 border rounded d-inline-block mb-1">
+                            {{ act.evidencia.codigo }}
+                        </span>
+                        {% if act.evidencia.archivo %}
+                        <div>
+                            <img src="{% static act.evidencia.archivo %}" alt="Evidencia #{{ act.id }}" class="img-thumbnail" style="width: 48px; height: 36px; object-fit: cover;">
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if act.evidencia.estado == 'Aprobado' %}
+                            <span class="badge bg-success">Aprobado</span>
+                        {% elif act.evidencia.estado == 'Pendiente' %}
+                            <span class="badge bg-warning text-dark">Pendiente</span>
+                        {% elif act.evidencia.estado == 'Rechazado' %}
+                            <span class="badge bg-danger">Rechazado</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ act.evidencia.estado }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if act.evidencia.observacion %}
+                            <small class="text-secondary d-block fst-italic">"{{ act.evidencia.observacion }}"</small>
+                            {% if act.evidencia.verificador %}
+                                <small class="text-muted" style="font-size: 0.75rem;">— {{ act.evidencia.verificador }} ({{ act.evidencia.fecha_validacion }})</small>
+                            {% endif %}
+                        {% else %}
+                            <small class="text-muted fst-italic">Sin observaciones</small>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center py-5 text-muted">
+                        <p class="mb-2">No registras actividades en este período todavía.</p>
+                        <a href="{% url 'registrar_actividad' %}" class="btn btn-sm btn-primary">Registrar mi primera actividad</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -31,10 +31,10 @@
     "evidencia": {
       "codigo": "EVI-ANT-002",
       "archivo": "img/evidencias/evidencia_02.svg",
-      "estado": "Pendiente",
-      "observacion": "",
-      "fecha_validacion": null,
-      "verificador": null
+      "estado": "Aprobado",
+      "observacion": "Reunion y acuerdos revisados.",
+      "fecha_validacion": "2026-09-04",
+      "verificador": "Alan Von Kretschmann"
     }
   },
   {
@@ -106,6 +106,25 @@
     "telefono": "+56911223344",
     "evidencia": {
       "codigo": "EVI-LA -006",
+      "archivo": "img/evidencias/evidencia_01.svg",
+      "estado": "Pendiente",
+      "observacion": "",
+      "fecha_validacion": null,
+      "verificador": null
+    }
+  },
+  {
+    "id": 7,
+    "fecha": "2026-09-05",
+    "funcionario": "Manuel Barraza Delgado",
+    "delegacion": "Rural",
+    "item": "Atención territorial",
+    "descripcion": "Atención Rural",
+    "accion": "ayuda mantencion camino rural",
+    "contacto": "Juan Perez",
+    "telefono": "",
+    "evidencia": {
+      "codigo": "EVI-RUR-007",
       "archivo": "img/evidencias/evidencia_01.svg",
       "estado": "Pendiente",
       "observacion": "",

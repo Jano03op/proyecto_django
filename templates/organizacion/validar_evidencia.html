@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Validar Evidencia #{{ actividad.id }} — Sistema SGR{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- Encabezado y navegación -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h2 class="h3 mb-1 fw-bold text-dark">Validación de Evidencia Operativa</h2>
+                <p class="text-muted mb-0">Revisión y control de conformidad de la actividad #{{ actividad.id }}.</p>
+            </div>
+            <a href="{% url 'panel_admin' %}" class="btn btn-outline-secondary">
+                &larr; Volver al consolidado
+            </a>
+        </div>
+
+        <div class="row g-4">
+            <!-- Columna izquierda: Detalle de la Actividad -->
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white py-3 border-bottom">
+                        <h5 class="card-title mb-0 fw-bold">Detalle de la Actividad</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless table-sm mb-0">
+                            <tbody>
+                                <tr>
+                                    <th class="text-muted" style="width: 130px;">Fecha:</th>
+                                    <td><span class="fw-semibold">{{ actividad.fecha }}</span></td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted">Funcionario:</th>
+                                    <td>{{ actividad.funcionario }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted">Delegación:</th>
+                                    <td><span class="badge bg-light text-dark border">{{ actividad.delegacion }}</span></td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted">Ítem Medible:</th>
+                                    <td>
+                                        <span class="badge text-bg-info bg-opacity-10 text-primary border border-info border-opacity-25">
+                                            {{ actividad.item }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% if actividad.contacto %}
+                                <tr>
+                                    <th class="text-muted">Contacto:</th>
+                                    <td>{{ actividad.contacto }} {% if actividad.telefono %}({{ actividad.telefono }}){% endif %}</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+
+                        <hr class="my-3">
+
+                        <h6 class="fw-bold text-secondary small text-uppercase mb-2">Descripción del Requerimiento</h6>
+                        <p class="small text-dark mb-3">{{ actividad.descripcion }}</p>
+
+                        <h6 class="fw-bold text-secondary small text-uppercase mb-2">Acción Ejecutada</h6>
+                        <p class="small text-dark mb-0">{{ actividad.accion }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna derecha: Evidencia y Formulario de Validación -->
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 fw-bold">Archivo de Respaldo</h5>
+                        <div>
+                            {% if actividad.evidencia.estado == 'Aprobado' %}
+                                <span class="badge bg-success">Aprobado</span>
+                            {% elif actividad.evidencia.estado == 'Pendiente' %}
+                                <span class="badge bg-warning text-dark">Pendiente</span>
+                            {% elif actividad.evidencia.estado == 'Rechazado' %}
+                                <span class="badge bg-danger">Rechazado</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-body text-center p-3">
+                        <p class="small text-muted mb-2">
+                            Código Verificador: <code class="fw-bold text-dark">{{ actividad.evidencia.codigo }}</code>
+                        </p>
+                        {% if actividad.evidencia.archivo %}
+                            <div class="p-2 bg-light rounded border mb-2">
+                                <img src="{% static actividad.evidencia.archivo %}" alt="Evidencia {{ actividad.evidencia.codigo }}" class="img-fluid rounded" style="max-height: 200px;">
+                            </div>
+                        {% endif %}
+
+                        {% if actividad.evidencia.fecha_validacion %}
+                            <div class="small text-muted mt-2 text-start bg-light p-2 rounded">
+                                <div><strong>Última revisión:</strong> {{ actividad.evidencia.fecha_validacion }}</div>
+                                <div><strong>Verificador:</strong> {{ actividad.evidencia.verificador }}</div>
+                                {% if actividad.evidencia.observacion %}
+                                    <div class="mt-1"><strong>Observación previa:</strong> <em>"{{ actividad.evidencia.observacion }}"</em></div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Formulario de Decisión (Aprobar / Rechazar) -->
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white py-3 border-bottom">
+                        <h5 class="card-title mb-0 fw-bold">Resolución de Coordinación</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="POST" action="{% url 'validar_evidencia' actividad.id %}">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="verificador" class="form-label fw-semibold small">Verificador Responsable</label>
+                                <input type="text" class="form-control form-control-sm" id="verificador" name="verificador" value="Alan Von Kretschmann (Coordinador)" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="observacion" class="form-label fw-semibold small">Observaciones / Motivo de la Decisión</label>
+                                <textarea class="form-control" id="observacion" name="observacion" rows="3" placeholder="Ingrese comentarios de conformidad o el motivo del rechazo...">{{ actividad.evidencia.observacion }}</textarea>
+                            </div>
+
+                            <div class="d-flex justify-content-end gap-2 pt-2">
+                                <button type="submit" name="decision" value="Rechazado" class="btn btn-outline-danger">
+                                    Rechazar Evidencia
+                                </button>
+                                <button type="submit" name="decision" value="Aprobado" class="btn btn-success fw-semibold">
+                                    Aprobar Evidencia
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
