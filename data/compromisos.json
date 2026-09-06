@@ -1,0 +1,198 @@
+[
+  {
+    "id": 1,
+    "origen": "Solicitud ciudadana",
+    "solicitante": "Marta Gómez Castillo",
+    "territorio": "La Antena",
+    "responsable": "Elizabeth Villanueva",
+    "area_apoyo": "Vivienda",
+    "descripcion": "Coordinar visita técnica para revisar postulación al subsidio DS49.",
+    "fecha_registro": "2026-08-20",
+    "fecha_compromiso": "2026-08-30",
+    "estado": "Realizado",
+    "observacion": "Visita realizada y ficha entregada a la familia.",
+    "historial": [
+      {
+        "estado_anterior": null,
+        "estado_nuevo": "Ingresado",
+        "autor": "Elizabeth Villanueva",
+        "fecha": "2026-08-20",
+        "observacion": "Compromiso registrado desde atención presencial."
+      },
+      {
+        "estado_anterior": "Ingresado",
+        "estado_nuevo": "En proceso",
+        "autor": "Elizabeth Villanueva",
+        "fecha": "2026-08-25",
+        "observacion": "Se agenda visita técnica."
+      },
+      {
+        "estado_anterior": "En proceso",
+        "estado_nuevo": "Realizado",
+        "autor": "Elizabeth Villanueva",
+        "fecha": "2026-08-30",
+        "observacion": "Visita realizada y ficha entregada a la familia."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "origen": "Solicitud ciudadana",
+    "solicitante": "Junta de Vecinos Las Compañías Alto",
+    "territorio": "Las Compañías",
+    "responsable": "Pablo Cuadra Corrales",
+    "area_apoyo": "Aseo y Ornato",
+    "descripcion": "Gestionar retiro de escombros en sitio eriazo del sector alto.",
+    "fecha_registro": "2026-08-25",
+    "fecha_compromiso": "2026-09-02",
+    "estado": "En proceso",
+    "observacion": "En coordinación con la unidad de Aseo y Ornato para definir fecha de retiro.",
+    "historial": [
+      {
+        "estado_anterior": null,
+        "estado_nuevo": "Ingresado",
+        "autor": "Pablo Cuadra Corrales",
+        "fecha": "2026-08-25",
+        "observacion": "Compromiso registrado tras reunión con la junta de vecinos."
+      },
+      {
+        "estado_anterior": "Ingresado",
+        "estado_nuevo": "En proceso",
+        "autor": "Pablo Cuadra Corrales",
+        "fecha": "2026-08-28",
+        "observacion": "En coordinación con la unidad de Aseo y Ornato para definir fecha de retiro."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "origen": "Actividad interna",
+    "solicitante": "María Soledad Rojas",
+    "territorio": "La Pampa",
+    "responsable": "María Soledad Rojas",
+    "area_apoyo": "Desarrollo Comunitario",
+    "descripcion": "Organizar taller de orientación de subsidios habitacionales para el sector.",
+    "fecha_registro": "2026-08-18",
+    "fecha_compromiso": "2026-08-28",
+    "estado": "Pendiente",
+    "observacion": "A la espera de confirmar sala comunitaria disponible.",
+    "historial": [
+      {
+        "estado_anterior": null,
+        "estado_nuevo": "Ingresado",
+        "autor": "María Soledad Rojas",
+        "fecha": "2026-08-18",
+        "observacion": "Compromiso registrado como parte de la planificación mensual."
+      },
+      {
+        "estado_anterior": "Ingresado",
+        "estado_nuevo": "Pendiente",
+        "autor": "María Soledad Rojas",
+        "fecha": "2026-08-22",
+        "observacion": "A la espera de confirmar sala comunitaria disponible."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "origen": "Solicitud ciudadana",
+    "solicitante": "Comité de Turismo Avenida del Mar",
+    "territorio": "Avenida del Mar",
+    "responsable": "Rodrigo Fuenzalida Vásquez",
+    "area_apoyo": "Espacios Públicos",
+    "descripcion": "Instalar señalética turística en el borde costero antes de temporada estival.",
+    "fecha_registro": "2026-08-10",
+    "fecha_compromiso": "2026-08-25",
+    "estado": "Pendiente",
+    "observacion": "Presupuesto en revisión por la unidad de Espacios Públicos.",
+    "historial": [
+      {
+        "estado_anterior": null,
+        "estado_nuevo": "Ingresado",
+        "autor": "Rodrigo Fuenzalida Vásquez",
+        "fecha": "2026-08-10",
+        "observacion": "Compromiso registrado en reunión con el comité de turismo."
+      },
+      {
+        "estado_anterior": "Ingresado",
+        "estado_nuevo": "Pendiente",
+        "autor": "Rodrigo Fuenzalida Vásquez",
+        "fecha": "2026-08-14",
+        "observacion": "Presupuesto en revisión por la unidad de Espacios Públicos."
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "origen": "Solicitud ciudadana",
+    "solicitante": "Comunidad Rural Sector Norte",
+    "territorio": "Rural",
+    "responsable": "Manuel Barraza Delgado",
+    "area_apoyo": "Conectividad",
+    "descripcion": "Solicitar a la empresa proveedora la revisión de la antena que da cobertura al sector.",
+    "fecha_registro": "2026-08-05",
+    "fecha_compromiso": "2026-08-20",
+    "estado": "Pendiente",
+    "observacion": "",
+    "historial": [
+      {
+        "estado_anterior": null,
+        "estado_nuevo": "Ingresado",
+        "autor": "Manuel Barraza Delgado",
+        "fecha": "2026-08-05",
+        "observacion": "Compromiso registrado desde solicitud telefónica."
+      },
+      {
+        "estado_anterior": "Ingresado",
+        "estado_nuevo": "Pendiente",
+        "autor": "Manuel Barraza Delgado",
+        "fecha": "2026-09-06",
+        "observacion": ""
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "origen": "Actividad interna",
+    "solicitante": "Alan Von Kretschmann",
+    "territorio": "Centro",
+    "responsable": "Alan Von Kretschmann",
+    "area_apoyo": "Operativos Municipales",
+    "descripcion": "Coordinar operativo municipal de atención integral en la plaza de armas.",
+    "fecha_registro": "2026-08-28",
+    "fecha_compromiso": "2026-09-10",
+    "estado": "Ingresado",
+    "observacion": "",
+    "historial": [
+      {
+        "estado_anterior": null,
+        "estado_nuevo": "Ingresado",
+        "autor": "Alan Von Kretschmann",
+        "fecha": "2026-08-28",
+        "observacion": "Compromiso registrado como parte del plan de operativos del mes."
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "origen": "Solicitud ciudadana",
+    "solicitante": "Manuel Espinoza Lopez",
+    "territorio": "Avenida del Mar",
+    "responsable": "Manuel",
+    "area_apoyo": "",
+    "descripcion": "Arreglar las calles de la ciudad",
+    "fecha_registro": "2026-09-06",
+    "fecha_compromiso": "2026-09-10",
+    "estado": "Ingresado",
+    "observacion": "",
+    "historial": [
+      {
+        "estado_anterior": null,
+        "estado_nuevo": "Ingresado",
+        "autor": "Manuel",
+        "fecha": "2026-09-06",
+        "observacion": "Compromiso registrado en la agenda colectiva."
+      }
+    ]
+  }
+]
