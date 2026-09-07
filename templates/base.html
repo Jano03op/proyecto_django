@@ -6,42 +6,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema SGR — Municipalidad de La Serena{% endblock %}</title>
 
-    <!-- Bootstrap 5 CSS local -->
+    <!-- Fuentes y estilos institucionales -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 
     <style>
         :root {
             --sgr-granate: #7A1B1E;
             --sgr-granate-dark: #591314;
-            --sgr-crema: #F8F9FA;
+            --sgr-granate-light: #FBF2F2;
+            --sgr-crema: #F7F5F0;
             --sgr-tinta: #1F2A33;
+            --sgr-tinta-suave: #4A5560;
             --sgr-azul: #0E5C68;
+            --sgr-azul-dark: #09424B;
+            --sgr-azul-light: #EDF7F9;
+            --sgr-borde: #E3DCCF;
+            --sgr-borde-suave: #EAE6DF;
         }
 
         body {
             background-color: var(--sgr-crema);
             color: var(--sgr-tinta);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+
+        h1, h2, h3, .font-serif {
+            font-family: 'Fraunces', serif;
         }
 
         .header-stripe {
             background-color: var(--sgr-granate);
             color: #ffffff;
             font-size: 0.85rem;
-            padding: 6px 0;
+            padding: 7px 0;
             letter-spacing: 0.3px;
         }
 
         .navbar-custom {
             background-color: #ffffff;
-            border-bottom: 2px solid #e2dacb;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+            border-bottom: 1px solid var(--sgr-borde);
+            box-shadow: 0 2px 8px rgba(31, 42, 51, 0.04);
         }
 
         .navbar-custom .navbar-brand {
+            font-family: 'Fraunces', serif;
             font-weight: 700;
+            font-size: 1.35rem;
             color: var(--sgr-tinta);
         }
 
@@ -51,37 +67,141 @@
 
         .nav-link {
             font-weight: 500;
-            color: #495057;
+            color: var(--sgr-tinta-suave);
             margin-right: 8px;
+            transition: color 0.15s ease;
         }
 
         .nav-link:hover, .nav-link.active {
             color: var(--sgr-granate);
         }
 
+        /* Botones temáticos */
         .btn-granate {
             background-color: var(--sgr-granate);
             color: #ffffff;
-            border: none;
+            border: 1px solid var(--sgr-granate);
+            font-weight: 500;
+            transition: all 0.15s ease;
         }
 
-        .btn-granate:hover {
+        .btn-granate:hover, .btn-granate:focus {
             background-color: var(--sgr-granate-dark);
+            border-color: var(--sgr-granate-dark);
             color: #ffffff;
+            box-shadow: 0 4px 10px rgba(122, 27, 30, 0.25);
+        }
+
+        .btn-outline-granate {
+            background-color: transparent;
+            color: var(--sgr-granate);
+            border: 1px solid var(--sgr-granate);
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+
+        .btn-outline-granate:hover {
+            background-color: var(--sgr-granate);
+            color: #ffffff;
+        }
+
+        .btn-azul {
+            background-color: var(--sgr-azul);
+            color: #ffffff;
+            border: 1px solid var(--sgr-azul);
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+
+        .btn-azul:hover, .btn-azul:focus {
+            background-color: var(--sgr-azul-dark);
+            border-color: var(--sgr-azul-dark);
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(14, 92, 104, 0.25);
+        }
+
+        .btn-outline-azul {
+            background-color: transparent;
+            color: var(--sgr-azul);
+            border: 1px solid var(--sgr-azul);
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+
+        .btn-outline-azul:hover {
+            background-color: var(--sgr-azul);
+            color: #ffffff;
+        }
+
+        /* Badges de estado modernos */
+        .badge-estado-aprobado {
+            background-color: #E8F5E9;
+            color: #1E4620;
+            border: 1px solid #A5D6A7;
+            font-weight: 600;
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+        }
+
+        .badge-estado-pendiente {
+            background-color: #FFF8E1;
+            color: #795548;
+            border: 1px solid #FFE082;
+            font-weight: 600;
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+        }
+
+        .badge-estado-rechazado {
+            background-color: #FFEBEE;
+            color: #8B0000;
+            border: 1px solid #FFCDD2;
+            font-weight: 600;
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+        }
+
+        /* Badges de delegación e ítems */
+        .badge-delegacion {
+            background-color: #FAF8F5;
+            color: var(--sgr-tinta);
+            border: 1px solid var(--sgr-borde);
+            font-weight: 500;
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+        }
+
+        .badge-item {
+            background-color: var(--sgr-azul-light);
+            color: var(--sgr-azul);
+            border: 1px solid rgba(14, 92, 104, 0.25);
+            font-weight: 500;
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+        }
+
+        /* Tarjetas del sistema */
+        .card-sgr {
+            background-color: #ffffff;
+            border: 1px solid var(--sgr-borde-suave);
+            border-radius: 10px;
+            box-shadow: 0 4px 14px rgba(31, 42, 51, 0.04);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
 
         main.main-content {
             flex: 1 0 auto;
-            padding-top: 1.5rem;
-            padding-bottom: 3rem;
+            padding-top: 2rem;
+            padding-bottom: 3.5rem;
         }
 
         footer.footer-custom {
             flex-shrink: 0;
             background-color: var(--sgr-tinta);
             color: #cfd4d8;
-            padding: 24px 0 16px;
+            padding: 26px 0 18px;
             font-size: 0.9rem;
+            border-top: 3px solid var(--sgr-granate);
         }
     </style>
 
@@ -116,11 +236,11 @@
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Organización
                         </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/organizacion/panel/">Consolidado General</a></li>
-                            <li><a class="dropdown-item" href="/organizacion/mis-actividades/">Mis Actividades</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/organizacion/registrar/">+ Registrar Actividad</a></li>
+                        <ul class="dropdown-menu shadow-sm border-0" style="border-radius: 8px;">
+                            <li><a class="dropdown-item py-2" href="{% url 'panel_admin' %}">Consolidado General</a></li>
+                            <li><a class="dropdown-item py-2" href="{% url 'panel_funcionario' %}">Mis Actividades</a></li>
+                            <li><hr class="dropdown-divider my-1"></li>
+                            <li><a class="dropdown-item py-2 fw-semibold text-danger" href="{% url 'registrar_actividad' %}">+ Registrar Actividad</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -168,7 +288,7 @@
             <div class="row align-items-center">
                 <div class="col-md-6 mb-2 mb-md-0">
                     <strong>Ilustre Municipalidad de La Serena</strong><br>
-                    <small>Gestión Territorial y Delegaciones Municipales — Evaluación Sumativa #1 Backend</small>
+                    <small>Gestión Territorial y Delegaciones Municipales</small>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <small>&copy; 2026 Sistema SGR. Todos los derechos reservados.</small>

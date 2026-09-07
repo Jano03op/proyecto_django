@@ -6,113 +6,118 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-8">
-        <!-- Encabezado -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <!-- Encabezado con navegación -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
             <div>
-                <h2 class="h3 mb-1 fw-bold text-dark">Registrar Actividad Diaria</h2>
-                <p class="text-muted mb-0">Autoregistro de labores con generación automática de código de evidencia.</p>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="badge badge-delegacion">Autoregistro</span>
+                    <span class="text-muted small">Módulo de Organización</span>
+                </div>
+                <h2 class="h2 mb-1 fw-bold text-dark font-serif">Registrar Actividad Diaria</h2>
+                <p class="text-muted mb-0">Ingreso de labores operativas con generación automática de código de evidencia.</p>
             </div>
-            <a href="{% url 'panel_admin' %}" class="btn btn-outline-secondary">
-                Volver al panel
+            <a href="{% url 'panel_admin' %}" class="btn btn-outline-secondary btn-sm">
+                &larr; Volver al panel
             </a>
         </div>
 
         <!-- Tarjeta del Formulario -->
-        <div class="card shadow-sm border-0">
+        <div class="card card-sgr border-0 mb-4">
+            <div class="card-header bg-white py-3 border-bottom">
+                <h5 class="card-title mb-0 fw-bold font-serif text-dark">Formulario de Registro Operativo</h5>
+            </div>
             <div class="card-body p-4">
                 <form method="POST" action="{% url 'registrar_actividad' %}">
                     {% csrf_token %}
 
                     <div class="row g-3">
-                        <!-- Fecha -->
+                        <!-- Fecha (Día / Mes / Año) -->
                         <div class="col-md-6">
-                            <label for="fecha" class="form-label fw-semibold">Fecha de la Actividad <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="fecha" name="fecha" required>
-                        </div>
-
-                        <!-- Delegación -->
-                        <div class="col-md-6">
-                            <label for="delegacion" class="form-label fw-semibold">Delegación Territorial <span class="text-danger">*</span></label>
-                            <select class="form-select" id="delegacion" name="delegacion" required>
-                                <option value="" selected disabled>Seleccione una delegación...</option>
-                                <option value="La Antena">La Antena</option>
-                                <option value="Las Compañías">Las Compañías</option>
-                                <option value="La Pampa">La Pampa</option>
-                                <option value="Avenida del Mar">Avenida del Mar</option>
-                                <option value="Centro">Centro</option>
-                                <option value="Rural">Rural</option>
-                            </select>
+                            <label for="fecha_visual" class="form-label fw-semibold small text-secondary">
+                                Fecha de la Actividad (Día/Mes/Año) <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control shadow-none font-monospace" id="fecha_visual" placeholder="DD/MM/AAAA" maxlength="10" autocomplete="off" required>
+                                <button class="btn btn-outline-secondary" type="button" id="btn-calendario" title="Abrir selector de calendario">
+                                    📅
+                                </button>
+                            </div>
+                            <input type="date" id="fecha" name="fecha" style="position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0;" tabindex="-1" required>
+                            <div class="form-text text-muted" style="font-size: 0.76rem;">Formato local: Día / Mes / Año (ej: 07/09/2026)</div>
                         </div>
 
                         <!-- Funcionario -->
                         <div class="col-md-6">
-                            <label for="funcionario" class="form-label fw-semibold">Funcionario Responsable <span class="text-danger">*</span></label>
-                            <select class="form-select" id="funcionario" name="funcionario" required>
-                                <option value="" selected disabled>Seleccione funcionario...</option>
-                                <option value="Elizabeth Villanueva">Elizabeth Villanueva (Delegada - La Antena)</option>
-                                <option value="Pablo Cuadra Corrales">Pablo Cuadra Corrales (Encargado - Las Compañías)</option>
-                                <option value="María Soledad Rojas">María Soledad Rojas (Encargada - La Pampa)</option>
-                                <option value="Rodrigo Fuenzalida Vásquez">Rodrigo Fuenzalida Vásquez (Encargado - Av. del Mar)</option>
-                                <option value="Manuel Barraza Delgado">Manuel Barraza Delgado (Encargado - Rural)</option>
-                                <option value="Alan Von Kretschmann">Alan Von Kretschmann (Coordinador - Centro)</option>
+                            <label for="funcionario" class="form-label fw-semibold small text-secondary">Funcionario Responsable <span class="text-danger">*</span></label>
+                            <select class="form-select shadow-none" id="funcionario" name="funcionario" required>
+                                <option value="" disabled {% if not funcionario_seleccionado %}selected{% endif %}>Seleccione funcionario...</option>
+                                {% for p in personas %}
+                                <option value="{{ p.nombre }}" {% if funcionario_seleccionado == p.nombre %}selected{% endif %}>
+                                    {{ p.nombre }} ({{ p.cargo }} - {{ p.delegacion }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Delegación -->
+                        <div class="col-md-6">
+                            <label for="delegacion" class="form-label fw-semibold small text-secondary">Delegación Territorial <span class="text-danger">*</span></label>
+                            <select class="form-select shadow-none" id="delegacion" name="delegacion" required>
+                                <option value="" disabled selected>Seleccione delegación...</option>
+                                {% for p in personas %}
+                                <option value="{{ p.delegacion }}">{{ p.delegacion }}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
                         <!-- Ítem Medible -->
                         <div class="col-md-6">
-                            <label for="item" class="form-label fw-semibold">Ítem Medible Asociado <span class="text-danger">*</span></label>
-                            <select class="form-select" id="item" name="item" required>
-                                <option value="" selected disabled>Seleccione ítem...</option>
-                                <option value="Atención de usuario">Atención de usuario</option>
-                                <option value="Visitas y reuniones">Visitas y reuniones</option>
-                                <option value="Gestión comunitaria">Gestión comunitaria</option>
-                                <option value="Orientación de subsidios">Orientación de subsidios</option>
-                                <option value="Coordinación estacional">Coordinación estacional</option>
-                                <option value="Acercamiento de servicios">Acercamiento de servicios</option>
-                                <option value="Atención territorial">Atención territorial</option>
-                                <option value="Gestión del espacio público">Gestión del espacio público</option>
-                                <option value="Operativos municipales">Operativos municipales</option>
+                            <label for="item" class="form-label fw-semibold small text-secondary">Ítem Medible Asociado <span class="text-danger">*</span></label>
+                            <select class="form-select shadow-none" id="item" name="item" required>
+                                <option value="" disabled selected>Seleccione funcionario o delegación primero...</option>
                             </select>
                         </div>
 
                         <!-- Descripción de la actividad -->
                         <div class="col-12">
-                            <label for="descripcion" class="form-label fw-semibold">Descripción del Problema o Solicitud <span class="text-danger">*</span></label>
-                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" placeholder="Detalle la situación o requerimiento atendido..." required></textarea>
+                            <label for="descripcion" class="form-label fw-semibold small text-secondary">Descripción del Problema o Requerimiento <span class="text-danger">*</span></label>
+                            <textarea class="form-control shadow-none" id="descripcion" name="descripcion" rows="3" placeholder="Detalle la situación, vecino solicitante o necesidad atendida..." required></textarea>
                         </div>
 
                         <!-- Acción ejecutada -->
                         <div class="col-12">
-                            <label for="accion" class="form-label fw-semibold">Acción Ejecutada <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="accion" name="accion" placeholder="Ej: Levantamiento en terreno, derivación a departamento social, etc." required>
+                            <label for="accion" class="form-label fw-semibold small text-secondary">Acción Ejecutada <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control shadow-none" id="accion" name="accion" placeholder="Ej: Levantamiento técnico en terreno, coordinación con alumbrado, derivación..." required>
                         </div>
 
                         <!-- Datos del contacto ciudadano -->
                         <div class="col-md-6">
-                            <label for="contacto" class="form-label fw-semibold">Nombre del Contacto / Ciudadano</label>
-                            <input type="text" class="form-control" id="contacto" name="contacto" placeholder="Nombre completo o institución">
+                            <label for="contacto" class="form-label fw-semibold small text-secondary">Nombre del Contacto / Vecino / Organización</label>
+                            <input type="text" class="form-control shadow-none" id="contacto" name="contacto" placeholder="Nombre completo o institución comunitaria">
                         </div>
 
                         <div class="col-md-6">
-                            <label for="telefono" class="form-label fw-semibold">Teléfono de Contacto</label>
-                            <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="+56 9 1234 5678">
+                            <label for="telefono" class="form-label fw-semibold small text-secondary">Teléfono de Contacto</label>
+                            <input type="tel" class="form-control shadow-none" id="telefono" name="telefono" placeholder="+56 9 1234 5678">
                         </div>
 
                         <!-- Nota informativa sobre evidencia -->
                         <div class="col-12">
-                            <div class="alert alert-light border d-flex align-items-center gap-2 mb-0" role="alert">
-                                <div>
-                                    <small class="text-muted">
-                                        <strong>Nota sobre la evidencia:</strong> Al guardar la actividad, el sistema generará de forma automática el código verificador único (ej: <code>EVI-ANT-00X</code>) y el registro quedará con estado <strong>Pendiente</strong> a la espera de la validación de coordinación.
-                                    </small>
+                            <div class="p-3 rounded d-flex align-items-start gap-2" style="background-color: var(--sgr-azul-light); border: 1px solid rgba(14, 92, 104, 0.2);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="var(--sgr-azul)" class="bi bi-info-circle flex-shrink-0 mt-1" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                </svg>
+                                <div class="small" style="color: var(--sgr-azul-dark);">
+                                    <strong>Generación de Evidencia:</strong> Al registrar la actividad, el sistema creará automáticamente el código verificador oficial (ej: <code>EVI-ANT-00X</code>) y la registrará en estado <strong>Pendiente</strong> para la revisión de coordinación.
                                 </div>
                             </div>
                         </div>
 
                         <!-- Botones de acción -->
-                        <div class="col-12 d-flex justify-content-end gap-2 pt-2">
+                        <div class="col-12 d-flex justify-content-end gap-2 pt-2 border-top mt-3">
                             <a href="{% url 'panel_admin' %}" class="btn btn-outline-secondary">Cancelar</a>
-                            <button type="submit" class="btn btn-primary px-4 fw-semibold">Guardar Actividad</button>
+                            <button type="submit" class="btn btn-granate px-4">Guardar Actividad</button>
                         </div>
                     </div>
                 </form>
@@ -123,12 +128,134 @@
 {% endblock %}
 
 {% block extra_js %}
+{{ personas|json_script:"personas-data" }}
 <script>
-    // Asigna automáticamente la fecha de hoy por defecto si está vacío
     document.addEventListener('DOMContentLoaded', function() {
+        const fechaVisual = document.getElementById('fecha_visual');
         const fechaInput = document.getElementById('fecha');
-        if (fechaInput && !fechaInput.value) {
-            fechaInput.value = new Date().toISOString().split('T')[0];
+        const btnCalendario = document.getElementById('btn-calendario');
+
+        function formatearAVisual(isoString) {
+            if (!isoString) return '';
+            const partes = isoString.split('-');
+            if (partes.length === 3) {
+                return `${partes[2]}/${partes[1]}/${partes[0]}`;
+            }
+            return isoString;
+        }
+
+        function convertirAISO(visualString) {
+            if (!visualString) return '';
+            const partes = visualString.split('/');
+            if (partes.length === 3 && partes[2].length === 4) {
+                return `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
+            }
+            return '';
+        }
+
+        // Inicializar con la fecha de hoy
+        const hoyISO = new Date().toISOString().split('T')[0];
+        if (fechaInput) fechaInput.value = hoyISO;
+        if (fechaVisual) fechaVisual.value = formatearAVisual(hoyISO);
+
+        if (btnCalendario && fechaInput) {
+            btnCalendario.addEventListener('click', function() {
+                if (typeof fechaInput.showPicker === 'function') {
+                    fechaInput.showPicker();
+                } else {
+                    fechaVisual.focus();
+                }
+            });
+        }
+
+        if (fechaInput && fechaVisual) {
+            fechaInput.addEventListener('change', function() {
+                if (this.value) {
+                    fechaVisual.value = formatearAVisual(this.value);
+                }
+            });
+
+            fechaVisual.addEventListener('input', function() {
+                let v = this.value.replace(/\D/g, '');
+                if (v.length > 8) v = v.substring(0, 8);
+                let final = '';
+                if (v.length > 0) final = v.substring(0, 2);
+                if (v.length >= 3) final += '/' + v.substring(2, 4);
+                if (v.length >= 5) final += '/' + v.substring(4, 8);
+                this.value = final;
+
+                const iso = convertirAISO(final);
+                if (iso) {
+                    fechaInput.value = iso;
+                }
+            });
+
+            const form = fechaVisual.closest('form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    const iso = convertirAISO(fechaVisual.value);
+                    if (iso) {
+                        fechaInput.value = iso;
+                    }
+                });
+            }
+        }
+
+        const dataScript = document.getElementById('personas-data');
+        if (!dataScript) return;
+
+        const personas = JSON.parse(dataScript.textContent);
+        const funcionarioSelect = document.getElementById('funcionario');
+        const delegacionSelect = document.getElementById('delegacion');
+        const itemSelect = document.getElementById('item');
+
+        function poblarItems(items) {
+            if (!itemSelect) return;
+            itemSelect.innerHTML = '<option value="" disabled selected>Seleccione ítem...</option>';
+            items.forEach(function(it) {
+                const opt = document.createElement('option');
+                opt.value = it.nombre;
+                opt.textContent = it.nombre + ' (Meta: ' + it.meta + ', Ponderador: ' + it.ponderador + '%)';
+                itemSelect.appendChild(opt);
+            });
+        }
+
+        function sincronizarPorFuncionario(nombre) {
+            const persona = personas.find(function(p) { return p.nombre === nombre; });
+            if (!persona) return;
+
+            if (delegacionSelect && delegacionSelect.value !== persona.delegacion) {
+                delegacionSelect.value = persona.delegacion;
+            }
+
+            poblarItems(persona.items || []);
+        }
+
+        function sincronizarPorDelegacion(delegacion) {
+            const persona = personas.find(function(p) { return p.delegacion === delegacion; });
+            if (!persona) return;
+
+            if (funcionarioSelect && funcionarioSelect.value !== persona.nombre) {
+                funcionarioSelect.value = persona.nombre;
+            }
+
+            poblarItems(persona.items || []);
+        }
+
+        if (funcionarioSelect) {
+            funcionarioSelect.addEventListener('change', function() {
+                sincronizarPorFuncionario(this.value);
+            });
+        }
+
+        if (delegacionSelect) {
+            delegacionSelect.addEventListener('change', function() {
+                sincronizarPorDelegacion(this.value);
+            });
+        }
+
+        if (funcionarioSelect && funcionarioSelect.value) {
+            sincronizarPorFuncionario(funcionarioSelect.value);
         }
     });
 </script>

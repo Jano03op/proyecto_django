@@ -4,41 +4,46 @@
 {% block title %}Consolidado General de Actividades — Sistema SGR{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+<!-- Encabezado con acciones -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
     <div>
-        <h2 class="h3 mb-1 fw-bold text-dark">Consolidado General de Actividades</h2>
-        <p class="text-muted mb-0">Supervisión y control de evidencias registradas en las 6 delegaciones territoriales.</p>
+        <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="badge badge-delegacion">Módulo Territorial</span>
+            <span class="text-muted small">Período Julio - Septiembre 2026</span>
+        </div>
+        <h2 class="h2 mb-1 fw-bold text-dark font-serif">Consolidado General de Actividades</h2>
+        <p class="text-muted mb-0">Supervisión, trazabilidad y control de evidencias en las 6 delegaciones municipales.</p>
     </div>
     <div class="d-flex gap-2">
-        <a href="{% url 'panel_funcionario' %}" class="btn btn-outline-secondary">
+        <a href="{% url 'panel_funcionario' %}" class="btn btn-outline-azul">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person me-1" viewBox="0 0 16 16">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+            </svg>
             Ver Mis Actividades
         </a>
-        <a href="{% url 'registrar_actividad' %}" class="btn btn-primary">
+        <a href="{% url 'registrar_actividad' %}" class="btn btn-granate">
             + Nueva Actividad
         </a>
     </div>
 </div>
 
-<!-- Filtros de búsqueda -->
-<div class="card shadow-sm border-0 mb-4">
-    <div class="card-body bg-white rounded">
+<!-- Barra de Filtros -->
+<div class="card card-sgr mb-4 border-0">
+    <div class="card-body p-3 p-md-4">
         <form method="GET" action="{% url 'panel_admin' %}" class="row g-3 align-items-end">
             <div class="col-md-4">
-                <label for="delegacion" class="form-label fw-semibold small text-secondary">Delegación</label>
-                <select name="delegacion" id="delegacion" class="form-select">
+                <label for="delegacion" class="form-label fw-semibold small text-secondary">Delegación Territorial</label>
+                <select name="delegacion" id="delegacion" class="form-select shadow-none">
                     <option value="">-- Todas las delegaciones --</option>
-                    <option value="La Antena" {% if filtro_delegacion == 'La Antena' %}selected{% endif %}>La Antena</option>
-                    <option value="Las Compañías" {% if filtro_delegacion == 'Las Compañías' %}selected{% endif %}>Las Compañías</option>
-                    <option value="La Pampa" {% if filtro_delegacion == 'La Pampa' %}selected{% endif %}>La Pampa</option>
-                    <option value="Avenida del Mar" {% if filtro_delegacion == 'Avenida del Mar' %}selected{% endif %}>Avenida del Mar</option>
-                    <option value="Centro" {% if filtro_delegacion == 'Centro' %}selected{% endif %}>Centro</option>
-                    <option value="Rural" {% if filtro_delegacion == 'Rural' %}selected{% endif %}>Rural</option>
+                    {% for d in delegaciones %}
+                    <option value="{{ d }}" {% if filtro_delegacion == d %}selected{% endif %}>{{ d }}</option>
+                    {% endfor %}
                 </select>
             </div>
 
             <div class="col-md-3">
-                <label for="estado" class="form-label fw-semibold small text-secondary">Estado Evidencia</label>
-                <select name="estado" id="estado" class="form-select">
+                <label for="estado" class="form-label fw-semibold small text-secondary">Estado de Validación</label>
+                <select name="estado" id="estado" class="form-select shadow-none">
                     <option value="">-- Todos los estados --</option>
                     <option value="Pendiente" {% if filtro_estado == 'Pendiente' %}selected{% endif %}>Pendiente</option>
                     <option value="Aprobado" {% if filtro_estado == 'Aprobado' %}selected{% endif %}>Aprobado</option>
@@ -48,86 +53,112 @@
 
             <div class="col-md-3">
                 <label for="funcionario" class="form-label fw-semibold small text-secondary">Funcionario</label>
-                <input type="text" name="funcionario" id="funcionario" class="form-control" placeholder="Buscar por nombre..." value="{{ filtro_funcionario }}">
+                <input type="text" name="funcionario" id="funcionario" class="form-control shadow-none" placeholder="Buscar por nombre..." value="{{ filtro_funcionario }}">
             </div>
 
             <div class="col-md-2 d-flex gap-2">
-                <button type="submit" class="btn btn-dark w-100">Filtrar</button>
-                <a href="{% url 'panel_admin' %}" class="btn btn-outline-secondary" title="Limpiar filtros">Limpiar</a>
+                <button type="submit" class="btn btn-azul w-100">
+                    Filtrar
+                </button>
+                <a href="{% url 'panel_admin' %}" class="btn btn-outline-secondary" title="Restablecer filtros">
+                    Limpiar
+                </a>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Tabla de actividades -->
-<div class="card shadow-sm border-0">
-    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 fw-bold">Registros del Período</h5>
-        <span class="badge bg-secondary">{{ actividades|length }} registros encontrados</span>
+<!-- Tabla de Actividades -->
+<div class="card card-sgr border-0 overflow-hidden">
+    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div class="d-flex align-items-center gap-2">
+            <h5 class="mb-0 fw-bold font-serif text-dark">Registros de Evidencias</h5>
+            <span class="badge bg-light text-secondary border px-2 py-1">{{ actividades|length }} registros</span>
+        </div>
+        {% if filtro_delegacion or filtro_estado or filtro_funcionario %}
+        <div class="d-flex align-items-center gap-1 small text-muted">
+            <span>Filtro activo:</span>
+            {% if filtro_delegacion %}<span class="badge badge-delegacion">{{ filtro_delegacion }}</span>{% endif %}
+            {% if filtro_estado %}<span class="badge bg-secondary">{{ filtro_estado }}</span>{% endif %}
+            {% if filtro_funcionario %}<span class="badge bg-light text-dark border">"{{ filtro_funcionario }}"</span>{% endif %}
+        </div>
+        {% endif %}
     </div>
+
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-                <tr>
-                    <th scope="col" style="width: 80px;">ID / Fecha</th>
-                    <th scope="col">Funcionario</th>
-                    <th scope="col">Delegación</th>
-                    <th scope="col">Ítem Medible</th>
-                    <th scope="col" style="min-width: 250px;">Descripción y Acción</th>
-                    <th scope="col">Evidencia</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col" class="text-end">Acciones</th>
+            <thead style="background-color: #FAF8F5; border-bottom: 2px solid var(--sgr-borde);">
+                <tr class="text-secondary small text-uppercase" style="letter-spacing: 0.5px;">
+                    <th scope="col" class="ps-3 py-3" style="width: 90px;">ID / Fecha</th>
+                    <th scope="col" class="py-3">Funcionario</th>
+                    <th scope="col" class="py-3">Delegación</th>
+                    <th scope="col" class="py-3">Ítem Medible</th>
+                    <th scope="col" class="py-3" style="min-width: 280px;">Descripción y Acción</th>
+                    <th scope="col" class="py-3">Evidencia</th>
+                    <th scope="col" class="py-3">Estado</th>
+                    <th scope="col" class="pe-3 py-3 text-end">Acción</th>
                 </tr>
             </thead>
             <tbody>
                 {% for act in actividades %}
-                <tr>
-                    <td>
-                        <strong class="text-dark">#{{ act.id }}</strong>
-                        <br>
-                        <small class="text-muted">{{ act.fecha }}</small>
+                <tr style="transition: background-color 0.15s ease;">
+                    <td class="ps-3">
+                        <strong class="text-dark font-monospace">#{{ act.id }}</strong>
+                        <div class="small text-muted">{{ act.fecha }}</div>
                     </td>
                     <td>
-                        <span class="fw-semibold">{{ act.funcionario }}</span>
+                        <span class="fw-semibold text-dark">{{ act.funcionario }}</span>
                         {% if act.contacto %}
-                        <br><small class="text-muted">Contacto: {{ act.contacto }}</small>
+                        <div class="small text-muted text-truncate" style="max-width: 170px;" title="{{ act.contacto }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-person-fill text-secondary me-1" viewBox="0 0 16 16">
+                                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4m5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                            </svg>{{ act.contacto }}
+                        </div>
                         {% endif %}
                     </td>
                     <td>
-                        <span class="badge bg-light text-dark border">{{ act.delegacion }}</span>
+                        <span class="badge badge-delegacion">{{ act.delegacion }}</span>
                     </td>
                     <td>
-                        <span class="badge text-bg-info bg-opacity-10 text-primary border border-info border-opacity-25">
+                        <span class="badge badge-item text-wrap text-start" style="max-width: 180px;">
                             {{ act.item }}
                         </span>
                     </td>
                     <td>
-                        <div class="small fw-medium text-dark">{{ act.descripcion }}</div>
-                        <div class="small text-muted mt-1"><em>Acción:</em> {{ act.accion }}</div>
+                        <div class="fw-medium text-dark small" style="line-height: 1.4;">{{ act.descripcion }}</div>
+                        <div class="small text-muted mt-1 fst-italic">
+                            <strong class="text-secondary fw-semibold">Acción:</strong> {{ act.accion }}
+                        </div>
                     </td>
                     <td>
-                        <span class="font-monospace small bg-light p-1 border rounded d-inline-block mb-1">
+                        <div class="font-monospace small bg-white text-secondary px-2 py-1 border rounded d-inline-block shadow-sm">
                             {{ act.evidencia.codigo }}
-                        </span>
+                        </div>
                         {% if act.evidencia.archivo %}
-                        <div>
-                            <img src="{% static act.evidencia.archivo %}" alt="Evidencia #{{ act.id }}" class="img-thumbnail" style="width: 50px; height: 38px; object-fit: cover;">
+                        <div class="mt-1">
+                            <img src="{% static act.evidencia.archivo %}" alt="Evidencia #{{ act.id }}" class="rounded border" style="width: 46px; height: 34px; object-fit: cover; background: #fafafa;">
                         </div>
                         {% endif %}
                     </td>
                     <td>
                         {% if act.evidencia.estado == 'Aprobado' %}
-                            <span class="badge bg-success">Aprobado</span>
+                            <span class="badge badge-estado-aprobado">
+                                ✓ Aprobado
+                            </span>
                         {% elif act.evidencia.estado == 'Pendiente' %}
-                            <span class="badge bg-warning text-dark">Pendiente</span>
+                            <span class="badge badge-estado-pendiente">
+                                ⏳ Pendiente
+                            </span>
                         {% elif act.evidencia.estado == 'Rechazado' %}
-                            <span class="badge bg-danger">Rechazado</span>
+                            <span class="badge badge-estado-rechazado">
+                                ✕ Rechazado
+                            </span>
                         {% else %}
                             <span class="badge bg-secondary">{{ act.evidencia.estado }}</span>
                         {% endif %}
                     </td>
-                    <td class="text-end">
-                        <a href="{% url 'validar_evidencia' act.id %}" class="btn btn-sm btn-outline-primary">
+                    <td class="pe-3 text-end">
+                        <a href="{% url 'validar_evidencia' act.id %}" class="btn btn-sm btn-outline-granate px-3">
                             Revisar
                         </a>
                     </td>
@@ -135,8 +166,10 @@
                 {% empty %}
                 <tr>
                     <td colspan="8" class="text-center py-5 text-muted">
-                        <p class="mb-1">No se encontraron actividades registradas con los filtros seleccionados.</p>
-                        <a href="{% url 'panel_admin' %}" class="small">Restablecer filtros</a>
+                        <div class="py-3">
+                            <p class="h6 mb-2 text-dark">No se encontraron actividades registradas con los filtros seleccionados.</p>
+                            <a href="{% url 'panel_admin' %}" class="btn btn-sm btn-outline-azul mt-1">Restablecer filtros</a>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}

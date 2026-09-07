@@ -45,11 +45,11 @@ Ruta base del módulo: `/organizacion/`
 | `registrar/` | `registrar_actividad(request)` | `registrar_actividad` | `organizacion/registrar_actividad.html` | Formulario para ingresar nueva actividad y generar su código de evidencia. |
 | `validar/<int:id>/` | `validar_evidencia(request, id)` | `validar_evidencia` | `organizacion/validar_evidencia.html` | Interfaz de coordinación para aprobar o rechazar la evidencia con comentarios. |
 
-### 3.3 Estructura de Datos (`data/actividades.json`)
-La información de actividades se almacena en el archivo `data/actividades.json` con el siguiente esquema:
+### 3.3 Estructura de Datos (`datosarray.py`)
+La información de actividades, compromisos, personas y usuarios se centraliza en `datosarray.py` con el siguiente esquema para actividades:
 
-```json
-[
+```python
+actividades = [
   {
     "id": 1,
     "fecha": "2026-09-01",
@@ -116,8 +116,7 @@ proyecto_django/
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
-├── data/                    # Almacenamiento de datos en JSON (sin BD)
-│   └── actividades.json
+├── datosarray.py            # Fuente centralizada de datos en memoria (sin BD)
 ├── static/                  # Archivos estáticos locales
 │   ├── css/                 # Bootstrap CSS local
 │   ├── js/                  # Bootstrap JS local
