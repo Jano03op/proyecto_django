@@ -43,7 +43,7 @@
                     <div>
                         <h4 class="mb-1 fw-bold text-dark font-serif">{{ funcionario_actual }}</h4>
                         <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <span class="badge badge-delegacion">
+                            <span class="badge badge-delegacion {% if persona_info %}badge-delegacion-{{ persona_info.delegacion|slugify }}{% endif %}">
                                 {% if persona_info %}{{ persona_info.cargo }} — {{ persona_info.delegacion }}{% else %}Delegación Municipal{% endif %}
                             </span>
                             <span class="text-muted small">Período Julio - Septiembre 2026</span>

@@ -42,7 +42,7 @@
                                 </tr>
                                 <tr>
                                     <th class="text-secondary small fw-semibold text-uppercase">Delegación:</th>
-                                    <td><span class="badge badge-delegacion">{{ actividad.delegacion }}</span></td>
+                                    <td><span class="badge badge-delegacion badge-delegacion-{{ actividad.delegacion|slugify }}">{{ actividad.delegacion }}</span></td>
                                 </tr>
                                 <tr>
                                     <th class="text-secondary small fw-semibold text-uppercase">Ítem Medible:</th>

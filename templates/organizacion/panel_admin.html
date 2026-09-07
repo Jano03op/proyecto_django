@@ -78,7 +78,7 @@
         {% if filtro_delegacion or filtro_estado or filtro_funcionario %}
         <div class="d-flex align-items-center gap-1 small text-muted">
             <span>Filtro activo:</span>
-            {% if filtro_delegacion %}<span class="badge badge-delegacion">{{ filtro_delegacion }}</span>{% endif %}
+            {% if filtro_delegacion %}<span class="badge badge-delegacion badge-delegacion-{{ filtro_delegacion|slugify }}">{{ filtro_delegacion }}</span>{% endif %}
             {% if filtro_estado %}<span class="badge bg-secondary">{{ filtro_estado }}</span>{% endif %}
             {% if filtro_funcionario %}<span class="badge bg-light text-dark border">"{{ filtro_funcionario }}"</span>{% endif %}
         </div>
@@ -117,7 +117,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <span class="badge badge-delegacion">{{ act.delegacion }}</span>
+                        <span class="badge badge-delegacion badge-delegacion-{{ act.delegacion|slugify }}">{{ act.delegacion }}</span>
                     </td>
                     <td>
                         <span class="badge badge-item text-wrap text-start" style="max-width: 180px;">
