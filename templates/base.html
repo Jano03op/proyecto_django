@@ -300,17 +300,21 @@
                             <li><a class="dropdown-item py-2 fw-semibold text-danger" href="{% url 'registrar_actividad' %}">+ Registrar Actividad</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'dashboard' %}">Indicadores</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Indicadores
+                        </a>
+                        <ul class="dropdown-menu shadow-sm border-0" style="border-radius: 8px;">
+                            <li><a class="dropdown-item py-2" href="{% url 'landing' %}">Monitor de Indicadores</a></li>
+                            <li><a class="dropdown-item py-2" href="{% url 'dashboard' %}">Tablero de Metas</a></li>
+                            <li><a class="dropdown-item py-2" href="{% url 'configurar_metas' %}">Configurar Metas</a></li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-muted" href="#">Agenda</a>
-                    </li>
+
                 </ul>
 
                 <div class="d-flex align-items-center gap-2">
                     <span class="badge bg-light text-dark border me-2">Funcionario Activo</span>
-                    <a href="#" class="btn btn-sm btn-outline-secondary">Cuentas</a>
                 </div>
             </div>
         </div>

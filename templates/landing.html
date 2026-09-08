@@ -77,11 +77,31 @@
             border-radius: 3px;
             font-size: 14px;
             font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
             transition: background 0.15s ease;
         }
 
         .btn-ingresar:hover {
             background: var(--granate-oscuro);
+            color: #fff;
+        }
+
+        .btn-indicadores {
+            background: var(--azul-costero);
+            color: #fff;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.15s ease;
+        }
+
+        .btn-indicadores:hover {
+            background: #09424B;
             color: #fff;
         }
 
@@ -232,7 +252,10 @@
 <nav class="top">
     <div class="container flex-entre">
         <div class="marca">Sistema<span>MUN</span></div>
-        <a href="{% url 'panel_admin' %}" class="btn-ingresar">Módulo Organización</a>
+        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <a href="{% url 'landing' %}" class="btn-indicadores">Módulo Indicadores</a>
+            <a href="{% url 'panel_admin' %}" class="btn-ingresar">Módulo Organización</a>
+        </div>
     </div>
 </nav>
 
@@ -243,6 +266,7 @@
                 <h1>La gestión municipal, con la cercanía de cada territorio.</h1>
                 <p class="lead">Registro, verificación y medición de la gestión de funcionarios y delegaciones, en un solo sistema.</p>
                 <div class="hero-acciones">
+                    <a href="{% url 'landing' %}" class="btn-indicadores">Módulo Indicadores &rarr;</a>
                     <a href="{% url 'panel_admin' %}" class="btn-ingresar">Ingresar a Organización &rarr;</a>
                     <a href="#delegaciones" class="enlace-simple">Ver delegaciones</a>
                 </div>

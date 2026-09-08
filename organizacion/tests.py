@@ -4,6 +4,20 @@ from . import services
 
 
 class OrganizacionDatosArrayTests(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        if services.DATA_FILE.exists():
+            cls._backup_json = services.DATA_FILE.read_text(encoding="utf-8")
+        else:
+            cls._backup_json = None
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls._backup_json is not None:
+            services.DATA_FILE.write_text(cls._backup_json, encoding="utf-8")
+        super().tearDownClass()
+
     def test_obtener_personas(self):
         personas = services.obtener_personas()
         self.assertGreater(len(personas), 0)
