@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es-cl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión — Sistema SGR</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+        :root {
+            --sgr-granate: #7A1B1E;
+            --sgr-granate-dark: #591314;
+            --sgr-crema: #F6F2EA;
+            --sgr-tinta: #1F2A33;
+        }
+
+        body {
+            background-color: var(--sgr-crema);
+            color: var(--sgr-tinta);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 440px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2dacb;
+            overflow: hidden;
+        }
+
+        .login-header {
+            background-color: var(--sgr-granate);
+            color: #ffffff;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .login-header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .login-header p {
+            font-size: 0.85rem;
+            margin-bottom: 0;
+            opacity: 0.9;
+        }
+
+        .btn-granate {
+            background-color: var(--sgr-granate);
+            color: #ffffff;
+            font-weight: 600;
+            border: none;
+            padding: 10px;
+        }
+
+        .btn-granate:hover {
+            background-color: var(--sgr-granate-dark);
+            color: #ffffff;
+        }
+
+        .demo-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card mb-3">
+        <div class="login-header">
+            <h1>Sistema SGR</h1>
+            <p>Municipalidad de La Serena — Acceso Funcionarios</p>
+        </div>
+
+        <div class="p-4">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show small py-2" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="username" class="form-label fw-semibold small">Nombre de Usuario</label>
+                    <input type="text" class="form-control" id="username" name="username" 
+                           placeholder="ej: evillanueva o admin" value="{{ username|default:'' }}" required autofocus>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label fw-semibold small">Contraseña</label>
+                    <input type="password" class="form-control" id="password" name="password" 
+                           placeholder="Ingrese su contraseña" required>
+                </div>
+
+                <div class="d-grid mb-3">
+                    <button type="submit" class="btn btn-granate">Ingresar al Sistema</button>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center small text-muted">
+                    <a href="{% url 'landing_page' %}" class="text-decoration-none">&larr; Volver al Portal</a>
+                    <span>Clave demo: <strong>123</strong></span>
+                </div>
+            </form>
+
+            <div class="mt-4 pt-3 border-top">
+                <p class="fw-semibold small text-secondary mb-2">Cuentas de prueba disponibles:</p>
+                <div class="demo-box">
+                    <ul class="list-unstyled mb-0 d-flex flex-column gap-1">
+                        <li><strong>evillanueva</strong> (Funcionario / Delegada La Antena)</li>
+                        <li><strong>avkretschmann</strong> (Coordinador / Centro)</li>
+                        <li><strong>verificador</strong> (Verificador Central)</li>
+                        <li><strong>admin</strong> (Administrador General)</li>
+                    </ul>
+                    <small class="text-muted d-block mt-2">Todas usan la clave: <code>123</code></small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
+

@@ -10,26 +10,16 @@ from django.contrib import messages
 from . import services
 
 def tablero_agenda(request):
-    """
-    muestra el tablero tipo kanban con los compromisos agrupados en 4 columnas (Ingresado, Pendiente, En
-    proceso, Realizado).
-    Además permite filtrar la lista completa por territorio (delegación)
-    y por responsable, usando parámetros que llegan por la URL
-    """
     territorio = request.GET.get('territorio', '').strip()
     responsable = request.GET.get('responsable', '').strip()
     compromisos = services.obtener_compromisos(
         filtro_territorio=territorio if territorio else None,
         filtro_responsable=responsable if responsable else None,)
 
-    # Se arma la lista de delegaciones disponibles a partir de los datos
-    # existentes, para poblar el <select> de filtro sin tener que
-    # escribir los nombres de delegaciones "a mano" en el template.
+
     territorios_disponibles = sorted({
         c.get("territorio") for c in services.cargar_compromisos() if c.get("territorio")})
-    # A cada compromiso se le agrega, solo para mostrar en pantalla, si
-    # está vencido o no. Este dato no se guarda en el JSON: se calcula
-    # cada vez que se abre el tablero, comparando con la fecha de hoy.
+
     for compromiso in compromisos:
         compromiso["vencido"] = services.esta_vencido(compromiso)
     columnas = services.agrupar_por_estado(compromisos)
@@ -44,8 +34,6 @@ def tablero_agenda(request):
 
 def crear_compromiso(request):
     """
-    Formulario para registrar un nuevo compromiso en la agenda
-    colectiva
     Si la petición es GET, solo se muestra el formulario vacío.
     Si la petición es POST, se valida que los campos obligatorios
     (solicitante, territorio, responsable y fecha comprometida) no
@@ -66,6 +54,9 @@ def crear_compromiso(request):
             return render(request, 'agenda/crear_compromiso.html', {
                 'valores': request.POST,})
 
+        usuario_sesion = request.session.get('usuario')
+        autor_registro = usuario_sesion.get('nombre') if usuario_sesion else responsable
+
         nuevo = services.crear_compromiso(
             origen=origen,
             solicitante=solicitante,
@@ -74,15 +65,20 @@ def crear_compromiso(request):
             area_apoyo=area_apoyo,
             descripcion=descripcion,
             fecha_compromiso=fecha_compromiso,
-            # Como el proyecto aún no tiene login real terminado en la app
-            # "cuentas", se usa el mismo responsable como autor del
-            # registro. Cuando el login esté listo, este valor debería
-            # reemplazarse por el usuario autenticado en la sesión.
-            autor=responsable,)
+            autor=autor_registro,
+        )
         messages.success(request, f'Compromiso #{nuevo["id"]} registrado correctamente en estado "Ingresado".')
         return redirect('tablero_agenda')
 
-    return render(request, 'agenda/crear_compromiso.html', {'valores': {}})
+    valores_iniciales = {}
+    usuario_sesion = request.session.get('usuario')
+    if usuario_sesion:
+        valores_iniciales = {
+            'responsable': usuario_sesion.get('nombre', ''),
+            'territorio': usuario_sesion.get('delegacion', ''),
+        }
+
+    return render(request, 'agenda/crear_compromiso.html', {'valores': valores_iniciales})
 
 def detalle_compromiso(request, id):
     """
@@ -99,7 +95,9 @@ def detalle_compromiso(request, id):
     if request.method == 'POST':
         nuevo_estado = request.POST.get('estado', '').strip()
         observacion = request.POST.get('observacion', '').strip()
-        autor = request.POST.get('autor', compromiso.get('responsable', 'Delegado'))
+        usuario_sesion = request.session.get('usuario')
+        autor_default = usuario_sesion.get('nombre') if usuario_sesion else compromiso.get('responsable', 'Delegado')
+        autor = request.POST.get('autor', '').strip() or autor_default
 
         actualizado = services.cambiar_estado_compromiso(
             compromiso_id=id,
@@ -107,7 +105,7 @@ def detalle_compromiso(request, id):
             autor=autor,
             observacion=observacion,)
         if actualizado:
-            messages.success(request, f'El compromiso #{id} ahora está en estado "{nuevo_estado}".')
+            messages.success(request, f'El compromiso {id} ahora está en estado "{nuevo_estado}".')
         else:
             messages.error(request, 'No se pudo actualizar el estado del compromiso.')
 

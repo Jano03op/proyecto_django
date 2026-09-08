@@ -1,19 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Compromiso #{{ compromiso.id }} — Agenda SGR{% endblock %}
+{% block title %}Compromiso {{ compromiso.id }} — Agenda SGR{% endblock %}
 
 {% block content %}
 <div class="mb-4 d-flex justify-content-between align-items-start flex-wrap gap-2">
     <div>
-        <h2 class="h3 mb-1 fw-bold text-dark">Compromiso #{{ compromiso.id }}</h2>
+        <h2 class="h3 mb-1 fw-bold text-dark">Compromiso {{ compromiso.id }}</h2>
         <p class="text-muted mb-0">{{ compromiso.origen }} — {{ compromiso.territorio }}</p>
     </div>
     <a href="{% url 'tablero_agenda' %}" class="btn btn-outline-secondary">Volver al tablero</a>
 </div>
 
 <div class="row g-4">
-    <!-- Columna izquierda: datos del compromiso y formulario de cambio de estado -->
     <div class="col-lg-7">
         <div class="card shadow-sm border-0 mb-4">
             <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
@@ -86,7 +85,6 @@
         </div>
     </div>
 
-    <!-- Columna derecha: historial de cambios (trazabilidad, RF-018) -->
     <div class="col-lg-5">
         <div class="card shadow-sm border-0">
             <div class="card-header bg-white py-3 border-bottom">

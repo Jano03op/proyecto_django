@@ -10,7 +10,7 @@
     "fecha_registro": "2026-08-20",
     "fecha_compromiso": "2026-08-30",
     "estado": "Realizado",
-    "observacion": "Visita realizada y ficha entregada a la familia.",
+    "observacion": "",
     "historial": [
       {
         "estado_anterior": null,
@@ -32,6 +32,27 @@
         "autor": "Elizabeth Villanueva",
         "fecha": "2026-08-30",
         "observacion": "Visita realizada y ficha entregada a la familia."
+      },
+      {
+        "estado_anterior": "Realizado",
+        "estado_nuevo": "Ingresado",
+        "autor": "Elizabeth Villanueva",
+        "fecha": "2026-09-08",
+        "observacion": ""
+      },
+      {
+        "estado_anterior": "Ingresado",
+        "estado_nuevo": "En proceso",
+        "autor": "Elizabeth Villanueva",
+        "fecha": "2026-09-08",
+        "observacion": ""
+      },
+      {
+        "estado_anterior": "En proceso",
+        "estado_nuevo": "Realizado",
+        "autor": "Elizabeth Villanueva",
+        "fecha": "2026-09-08",
+        "observacion": ""
       }
     ]
   },
@@ -74,8 +95,8 @@
     "descripcion": "Organizar taller de orientación de subsidios habitacionales para el sector.",
     "fecha_registro": "2026-08-18",
     "fecha_compromiso": "2026-08-28",
-    "estado": "Pendiente",
-    "observacion": "A la espera de confirmar sala comunitaria disponible.",
+    "estado": "Realizado",
+    "observacion": "",
     "historial": [
       {
         "estado_anterior": null,
@@ -90,6 +111,13 @@
         "autor": "María Soledad Rojas",
         "fecha": "2026-08-22",
         "observacion": "A la espera de confirmar sala comunitaria disponible."
+      },
+      {
+        "estado_anterior": "Pendiente",
+        "estado_nuevo": "Realizado",
+        "autor": "María Soledad Rojas",
+        "fecha": "2026-09-07",
+        "observacion": ""
       }
     ]
   },
@@ -104,7 +132,7 @@
     "fecha_registro": "2026-08-10",
     "fecha_compromiso": "2026-08-25",
     "estado": "Pendiente",
-    "observacion": "Presupuesto en revisión por la unidad de Espacios Públicos.",
+    "observacion": "",
     "historial": [
       {
         "estado_anterior": null,
@@ -119,6 +147,13 @@
         "autor": "Rodrigo Fuenzalida Vásquez",
         "fecha": "2026-08-14",
         "observacion": "Presupuesto en revisión por la unidad de Espacios Públicos."
+      },
+      {
+        "estado_anterior": "Pendiente",
+        "estado_nuevo": "Pendiente",
+        "autor": "Rodrigo Fuenzalida Vásque",
+        "fecha": "2026-09-08",
+        "observacion": ""
       }
     ]
   },
@@ -161,7 +196,7 @@
     "descripcion": "Coordinar operativo municipal de atención integral en la plaza de armas.",
     "fecha_registro": "2026-08-28",
     "fecha_compromiso": "2026-09-10",
-    "estado": "Ingresado",
+    "estado": "En proceso",
     "observacion": "",
     "historial": [
       {
@@ -170,6 +205,13 @@
         "autor": "Alan Von Kretschmann",
         "fecha": "2026-08-28",
         "observacion": "Compromiso registrado como parte del plan de operativos del mes."
+      },
+      {
+        "estado_anterior": "Ingresado",
+        "estado_nuevo": "En proceso",
+        "autor": "Alan Von Kretschmann",
+        "fecha": "2026-09-08",
+        "observacion": ""
       }
     ]
   },
@@ -191,6 +233,50 @@
         "estado_nuevo": "Ingresado",
         "autor": "Manuel",
         "fecha": "2026-09-06",
+        "observacion": "Compromiso registrado en la agenda colectiva."
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "origen": "Solicitud ciudadana",
+    "solicitante": "Unidad de transporte Las Compañias",
+    "territorio": "Las Compañías",
+    "responsable": "Administrador SGR",
+    "area_apoyo": "",
+    "descripcion": "Arreglar las Calles",
+    "fecha_registro": "2026-09-08",
+    "fecha_compromiso": "2026-09-24",
+    "estado": "Ingresado",
+    "observacion": "",
+    "historial": [
+      {
+        "estado_anterior": null,
+        "estado_nuevo": "Ingresado",
+        "autor": "Administrador SGR",
+        "fecha": "2026-09-08",
+        "observacion": "Compromiso registrado en la agenda colectiva."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "origen": "Actividad interna",
+    "solicitante": "dasadsdsad",
+    "territorio": "Avenida del Mar",
+    "responsable": "Revisor de Evidencias",
+    "area_apoyo": "",
+    "descripcion": "eqwqweqwe",
+    "fecha_registro": "2026-09-08",
+    "fecha_compromiso": "2026-10-10",
+    "estado": "Ingresado",
+    "observacion": "",
+    "historial": [
+      {
+        "estado_anterior": null,
+        "estado_nuevo": "Ingresado",
+        "autor": "Revisor de Evidencias",
+        "fecha": "2026-09-08",
         "observacion": "Compromiso registrado en la agenda colectiva."
       }
     ]

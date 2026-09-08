@@ -1,8 +1,3 @@
-"""
-    /agenda/tablero/            -> tablero_agenda   (kanban de compromisos)
-    /agenda/nuevo/               -> crear_compromiso (formulario de registro)
-    /agenda/compromiso/<id>/     -> detalle_compromiso (detalle + cambio de estado)
-"""
 from django.urls import path
 from agenda import views
 

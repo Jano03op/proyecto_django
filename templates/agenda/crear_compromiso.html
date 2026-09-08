@@ -11,13 +11,6 @@
 
 <div class="card shadow-sm border-0" style="max-width: 720px;">
     <div class="card-body bg-white rounded p-4">
-
-        <!--
-            method="POST" es obligatorio: le dice al navegador que los
-            datos del formulario deben viajar en el cuerpo de la
-            petición (no en la URL) y {% csrf_token %} es la protección
-            que exige Django contra envíos falsificados desde otro sitio.
-        -->
         <form method="POST" action="{% url 'crear_compromiso' %}">
             {% csrf_token %}
 

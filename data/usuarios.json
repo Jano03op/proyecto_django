@@ -1,0 +1,83 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "password": "123",
+    "nombre": "Administrador SGR",
+    "cargo": "Administrador Municipal",
+    "rol": "Administrador",
+    "delegacion": "Municipalidad Central",
+    "email": "admin@laserena.cl"
+  },
+  {
+    "id": 2,
+    "username": "evillanueva",
+    "password": "123",
+    "nombre": "Elizabeth Villanueva",
+    "cargo": "Delegada",
+    "rol": "Funcionario",
+    "delegacion": "La Antena",
+    "email": "evillanueva@laserena.cl"
+  },
+  {
+    "id": 3,
+    "username": "pcuadra",
+    "password": "123",
+    "nombre": "Pablo Cuadra Corrales",
+    "cargo": "Encargado",
+    "rol": "Funcionario",
+    "delegacion": "Las Compañías",
+    "email": "pcuadra@laserena.cl"
+  },
+  {
+    "id": 4,
+    "username": "mrojas",
+    "password": "123",
+    "nombre": "María Soledad Rojas",
+    "cargo": "Encargada",
+    "rol": "Funcionario",
+    "delegacion": "La Pampa",
+    "email": "mrojas@laserena.cl"
+  },
+  {
+    "id": 5,
+    "username": "rfuenzalida",
+    "password": "123",
+    "nombre": "Rodrigo Fuenzalida Vásquez",
+    "cargo": "Encargado",
+    "rol": "Funcionario",
+    "delegacion": "Avenida del Mar",
+    "email": "rfuenzalida@laserena.cl"
+  },
+  {
+    "id": 6,
+    "username": "mbarraza",
+    "password": "123",
+    "nombre": "Manuel Barraza Delgado",
+    "cargo": "Encargado",
+    "rol": "Funcionario",
+    "delegacion": "Rural",
+    "email": "mbarraza@laserena.cl"
+  },
+  {
+    "id": 7,
+    "username": "avkretschmann",
+    "password": "123",
+    "nombre": "Alan Von Kretschmann",
+    "cargo": "Coordinador General",
+    "rol": "Coordinador",
+    "delegacion": "Centro",
+    "email": "avkretschmann@laserena.cl"
+  },
+  {
+    "id": 8,
+    "username": "verificador",
+    "password": "123",
+    "nombre": "Revisor de Evidencias",
+    "cargo": "Verificador Técnico",
+    "rol": "Verificador",
+    "delegacion": "Municipalidad Central",
+    "email": "verificador@laserena.cl"
+  }
+]
+
