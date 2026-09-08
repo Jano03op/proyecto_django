@@ -8,7 +8,7 @@ El sistema tiene como propósito centralizar el registro, verificación, seguimi
 
 ## 1. Restricciones y Lineamientos Técnicos de la Evaluación
 
-- **Persistencia sin base de datos relacional**: Toda la información del dominio operativo se almacena y consulta de forma centralizada en colecciones en memoria mediante el archivo **`datosarray.py`**.
+- **Persistencia sin base de datos relacional**: Toda la información del proyecto se almacena y consulta mediante archivos en formato **JSON** (`data/actividades.json` para organización y `datosarray.json` para periodo y metas de indicadores).
 - **Framework Web**: **Django 6.1**.
 - **Diseño y Estilos**: **Bootstrap 5 local** (ubicado en `static/css/` y `static/js/`), sin dependencias externas por CDN, con paleta institucional serenense (granate y azul costero).
 - **Herencia de plantillas**: Estructura centralizada en `templates/base.html` con bloques reutilizables (`{% block content %}`, etc.).
@@ -25,9 +25,9 @@ El equipo de desarrollo dividió las responsabilidades en 4 aplicaciones Django 
 | Aplicación | Capa de Servicio | Responsabilidad Principal |
 |---|---|---|
 | **`cuentas`** | `cuentas/services.py` | Gestión de acceso, autenticación de funcionarios, roles y perfiles desde `usuarios`. |
-| **`organizacion`** | `organizacion/services.py` | Núcleo operativo: registro de actividades, validación de evidencias y filtros territoriales. |
+| **`organizacion`** | `organizacion/services.py` | Núcleo operativo: persistencia en `data/actividades.json`, validación de evidencias y filtros. |
 | **`agenda`** | `agenda/services.py` | Registro y seguimiento de compromisos ciudadanos agrupados por estados (Tablero Kanban). |
-| **`indicadores`** | `indicadores/views.py` | Tableros de avance, cumplimiento porcentual ponderado y cálculo de semáforo de desempeño. |
+| **`indicadores`** | `indicadores/views.py` | Tableros de avance, cumplimiento porcentual ponderado y semáforo desde `datosarray.json`. |
 
 ---
 
@@ -46,16 +46,11 @@ Ruta base del módulo: `/organizacion/`
 | `registrar/` | `registrar_actividad(request)` | `registrar_actividad` | `organizacion/registrar_actividad.html` | Formulario con selector de fecha `DD/MM/AAAA` y generación automática de código de evidencia. |
 | `validar/<int:id>/` | `validar_evidencia(request, id)` | `validar_evidencia` | `organizacion/validar_evidencia.html` | Interfaz de coordinación para aprobar o rechazar la evidencia con comentarios. |
 
-### 3.3 Estructura de Datos (`datosarray.py`)
-Toda la información se centraliza en `datosarray.py` evitando conflictos entre aplicaciones:
-- **`periodo`**: Rango de fechas del ciclo de evaluación municipal.
-- **`personas`**: Lista de funcionarios, sus metas por ítem, avances y ponderadores.
-- **`actividades`**: Registros operativos con códigos de evidencia, observaciones y estados (`Pendiente`, `Aprobado`, `Rechazado`).
-- **`compromisos`**: Base para el tablero Kanban de la app `agenda`.
-- **`usuarios`**: Base de credenciales y roles para la app `cuentas`.
+### 3.3 Estructura de Datos (`data/actividades.json`)
+La información operativa de actividades y evidencias se almacena y persiste en el archivo `data/actividades.json`:
 
-```python
-actividades = [
+```json
+[
   {
     "id": 1,
     "fecha": "2026-09-01",
@@ -74,8 +69,6 @@ actividades = [
       "fecha_validacion": "2026-09-02",
       "verificador": "Alan Von Kretschmann"
     }
-  }
-]
 ```
 
 ### 3.4 Identidad Visual y Colores de Delegaciones

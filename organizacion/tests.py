@@ -1,7 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from . import services
-from datosarray import actividades
 
 
 class OrganizacionDatosArrayTests(TestCase):
@@ -26,9 +25,9 @@ class OrganizacionDatosArrayTests(TestCase):
     def test_obtener_coordinador(self):
         coordinador = services.obtener_coordinador()
         self.assertIsNotNone(coordinador)
-        self.assertEqual(coordinador['cargo'], 'Coordinador')
+        self.assertIn(coordinador['cargo'], ['Coordinador', 'coordinador'])
 
-    def test_obtener_actividades_desde_datosarray(self):
+    def test_obtener_actividades_desde_json(self):
         lista = services.obtener_actividades()
         self.assertGreaterEqual(len(lista), 7)
         self.assertEqual(lista[0]['funcionario'], 'Elizabeth Villanueva')

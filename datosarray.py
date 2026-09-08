@@ -1,214 +1,22 @@
 # datosarray.py
 """
-Fuente única de verdad de datos en memoria para el Sistema de Gestión de Resultados (SGR).
-Centraliza las colecciones de datos compartidas por todos los módulos del proyecto Django:
-- 'indicadores': utiliza 'periodo' y 'personas'
-- 'organizacion': utiliza 'personas' y 'actividades'
-- 'agenda': utiliza 'compromisos' y 'personas'
-- 'cuentas': utiliza 'usuarios' y 'personas'
+Fuente centralizada de datos para el Sistema de Gestión de Resultados (SGR).
+Los datos de 'periodo' y 'personas' se leen dinámicamente desde datosarray.json
+(requisito formal de persistencia en archivos JSON sin base de datos relacional).
 """
 
-periodo = {
-    "inicio": "2026-07-01",
-    "termino": "2026-09-30",
-}
+import json
+from pathlib import Path
 
-personas = [
-    {
-        "nombre": "Elizabeth Villanueva",
-        "cargo": "Delegada",
-        "delegacion": "La Antena",
-        "items": [
-            {"nombre": "Atención de usuario", "meta": 55, "avance": 13, "ponderador": 10},
-            {"nombre": "Visitas y reuniones", "meta": 24, "avance": 3, "ponderador": 15},
-            {"nombre": "Gestión de talleres", "meta": 8, "avance": 6, "ponderador": 30},
-        ],
-    },
-    {
-        "nombre": "Pablo Cuadra Corrales",
-        "cargo": "Encargado",
-        "delegacion": "Las Compañías",
-        "items": [
-            {"nombre": "Atención de usuario", "meta": 40, "avance": 22, "ponderador": 20},
-            {"nombre": "Gestión comunitaria", "meta": 10, "avance": 9, "ponderador": 25},
-        ],
-    },
-    {
-        "nombre": "María Soledad Rojas",
-        "cargo": "Encargada",
-        "delegacion": "La Pampa",
-        "items": [
-            {"nombre": "Orientación de subsidios", "meta": 30, "avance": 30, "ponderador": 20},
-            {"nombre": "Visitas y reuniones", "meta": 18, "avance": 5, "ponderador": 15},
-        ],
-    },
-    {
-        "nombre": "Rodrigo Fuenzalida Vásquez",
-        "cargo": "Encargado",
-        "delegacion": "Avenida del Mar",
-        "items": [
-            {"nombre": "Coordinación estacional", "meta": 20, "avance": 4, "ponderador": 25},
-            {"nombre": "Atención de usuario", "meta": 45, "avance": 41, "ponderador": 15},
-        ],
-    },
-    {
-        "nombre": "Manuel Barraza Delgado",
-        "cargo": "Encargado",
-        "delegacion": "Rural",
-        "items": [
-            {"nombre": "Acercamiento de servicios", "meta": 12, "avance": 2, "ponderador": 30},
-            {"nombre": "Coordinación intersectorial", "meta": 8, "avance": 1, "ponderador": 20},
-        ],
-    },
-    {
-        "nombre": "Alan Von Kretschmann",
-        "cargo": "Coordinador",
-        "delegacion": "Centro",
-        "items": [
-            {"nombre": "Atención territorial", "meta": 50, "avance": 48, "ponderador": 20},
-            {"nombre": "Gestión del espacio público", "meta": 15, "avance": 15, "ponderador": 20},
-            {"nombre": "Operativos municipales", "meta": 6, "avance": 4, "ponderador": 15},
-        ],
-    },
-]
+_DATA_PATH = Path(__file__).resolve().parent / "datosarray.json"
 
-actividades = [
-    {
-        "id": 1,
-        "fecha": "2026-09-01",
-        "funcionario": "Elizabeth Villanueva",
-        "delegacion": "La Antena",
-        "item": "Atención de usuario",
-        "descripcion": "Atención presencial a ciudadana por orientación en subsidio habitacional DS49.",
-        "accion": "Orientación técnica y derivación interna a oficina de vivienda.",
-        "contacto": "Marta Gómez Castillo",
-        "telefono": "+56987654321",
-        "evidencia": {
-            "codigo": "EVI-ANT-001",
-            "archivo": "img/evidencias/evidencia_01.svg",
-            "estado": "Aprobado",
-            "observacion": "Atención registrada correctamente con ficha y derivación.",
-            "fecha_validacion": "2026-09-02",
-            "verificador": "Alan Von Kretschmann",
-        },
-    },
-    {
-        "id": 2,
-        "fecha": "2026-09-02",
-        "funcionario": "Elizabeth Villanueva",
-        "delegacion": "La Antena",
-        "item": "Visitas y reuniones",
-        "descripcion": "Reunión de coordinación con la Junta de Vecinos Villa La Florida sobre operativo de limpieza.",
-        "accion": "Levantamiento de requerimientos vecinales y calendarización de batea.",
-        "contacto": "Carlos Araya",
-        "telefono": "+56976543210",
-        "evidencia": {
-            "codigo": "EVI-ANT-002",
-            "archivo": "img/evidencias/evidencia_02.svg",
-            "estado": "Aprobado",
-            "observacion": "Reunion y acuerdos revisados.",
-            "fecha_validacion": "2026-09-04",
-            "verificador": "Alan Von Kretschmann",
-        },
-    },
-    {
-        "id": 3,
-        "fecha": "2026-09-02",
-        "funcionario": "Pablo Cuadra Corrales",
-        "delegacion": "Las Compañías",
-        "item": "Atención de usuario",
-        "descripcion": "Recepción de solicitud de luminarias públicas para pasaje Las Rosas.",
-        "accion": "Ingreso de formulario y solicitud a la dirección de alumbrado público.",
-        "contacto": "Patricia Collao",
-        "telefono": "+56965432109",
-        "evidencia": {
-            "codigo": "EVI-COM-001",
-            "archivo": "img/evidencias/evidencia_03.svg",
-            "estado": "Pendiente",
-            "observacion": "",
-            "fecha_validacion": None,
-            "verificador": None,
-        },
-    },
-    {
-        "id": 4,
-        "fecha": "2026-09-03",
-        "funcionario": "María Soledad Rojas",
-        "delegacion": "La Pampa",
-        "item": "Orientación de subsidios",
-        "descripcion": "Taller grupal informativo sobre postulaciones a subsidio de arriendo.",
-        "accion": "Charla explicativa presencial para 15 familias del sector El Milagro.",
-        "contacto": "Comité de Allegados La Pampa",
-        "telefono": "+56954321098",
-        "evidencia": {
-            "codigo": "EVI-PAM-001",
-            "archivo": "img/evidencias/evidencia_04.svg",
-            "estado": "Aprobado",
-            "observacion": "Lista de asistencia y registro fotográfico adjunto conformes.",
-            "fecha_validacion": "2026-09-03",
-            "verificador": "Alan Von Kretschmann",
-        },
-    },
-    {
-        "id": 5,
-        "fecha": "2026-09-04",
-        "funcionario": "Alan Von Kretschmann",
-        "delegacion": "Centro",
-        "item": "Operativos municipales",
-        "descripcion": "Inspección de ordenamiento del comercio ambulante en calle Cordovez.",
-        "accion": "Recorrido conjunto con inspectores municipales y Seguridad Ciudadana.",
-        "contacto": "Comercio Establecido Centro",
-        "telefono": "+56943210987",
-        "evidencia": {
-            "codigo": "EVI-CEN-001",
-            "archivo": "img/evidencias/evidencia_05.svg",
-            "estado": "Rechazado",
-            "observacion": "Falta adjuntar el acta de inspección firmada por el inspector a cargo.",
-            "fecha_validacion": "2026-09-04",
-            "verificador": "Alan Von Kretschmann",
-        },
-    },
-    {
-        "id": 6,
-        "fecha": "2026-09-04",
-        "funcionario": "Elizabeth Villanueva",
-        "delegacion": "La Antena",
-        "item": "Gestión de talleres",
-        "descripcion": "Taller de compostaje comunitario con vecinos de El Faro.",
-        "accion": "Capacitación presencial y entrega de composteras.",
-        "contacto": "Vecinos El Faro",
-        "telefono": "+56911223344",
-        "evidencia": {
-            "codigo": "EVI-ANT-006",
-            "archivo": "img/evidencias/evidencia_01.svg",
-            "estado": "Pendiente",
-            "observacion": "",
-            "fecha_validacion": None,
-            "verificador": None,
-        },
-    },
-    {
-        "id": 7,
-        "fecha": "2026-09-05",
-        "funcionario": "Manuel Barraza Delgado",
-        "delegacion": "Rural",
-        "item": "Atención territorial",
-        "descripcion": "Atención Rural",
-        "accion": "ayuda mantencion camino rural",
-        "contacto": "Juan Perez",
-        "telefono": "",
-        "evidencia": {
-            "codigo": "EVI-RUR-007",
-            "archivo": "img/evidencias/evidencia_01.svg",
-            "estado": "Pendiente",
-            "observacion": "",
-            "fecha_validacion": None,
-            "verificador": None,
-        },
-    },
-]
+with open(_DATA_PATH, encoding="utf-8") as _archivo:
+    _datos = json.load(_archivo)
 
-# Base de datos para la aplicación 'agenda' (Compromisos ciudadanos / Tablero Kanban)
+periodo = _datos["periodo"]
+personas = _datos["personas"]
+
+# Colección base para la aplicación 'agenda' (Tablero Kanban)
 compromisos = [
     {
         "id": 1,
@@ -218,7 +26,7 @@ compromisos = [
         "delegacion": "Las Compañías",
         "fecha_registro": "2026-09-02",
         "fecha_limite": "2026-09-20",
-        "estado": "En Proceso",  # "Por Iniciar", "En Proceso", "Finalizado"
+        "estado": "En Proceso",
         "prioridad": "Alta",
         "contacto": "Patricia Collao",
     },
@@ -260,7 +68,7 @@ compromisos = [
     },
 ]
 
-# Base de datos para la aplicación 'cuentas' (Usuarios, accesos y roles del sistema)
+# Colección base para la aplicación 'cuentas' (Usuarios del sistema)
 usuarios = [
     {
         "id": 1,
