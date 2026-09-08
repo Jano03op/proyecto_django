@@ -26,6 +26,11 @@
                                         <a class="nav-link" href="{% url 'logueo' %}">Mi progreso</a>
                                     {% endif %}
                                 </li>
+                                {% if rol == "administrador" or rol == "coordinador" %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'configurar_metas' %}">Configurar metas</a>
+                                </li>
+                                {% endif %}
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'mi_cuenta' %}">Mi cuenta</a>
                                 </li>

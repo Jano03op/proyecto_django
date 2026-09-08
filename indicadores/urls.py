@@ -23,4 +23,5 @@ urlpatterns = [
     path('', views.landing, name='landing'),
     path('resetear/', views.resetear, name='resetear'),
     path('mi-cuenta/', views.mi_cuenta, name='mi_cuenta'),
+    path('configuracion/', views.configurar_metas, name='configurar_metas'),
 ]

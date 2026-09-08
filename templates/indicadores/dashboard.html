@@ -51,6 +51,21 @@
         box-shadow: 0 4px 14px rgba(122, 27, 30, 0.08);
     }
 
+    .persona-encabezado {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 4px;
+    }
+
+    .persona-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
     .persona-nombre {
         font-size: 18px;
         font-weight: 600;
@@ -74,13 +89,10 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 10px 0;
-        border-bottom: 1px solid var(--crema-oscura);
+        padding: 10px 12px;
+        margin-bottom: 6px;
+        border-radius: 8px;
         font-size: 14px;
-    }
-
-    .fila-item:last-child {
-        border-bottom: none;
     }
 
     .fila-item .nombre-item {
@@ -96,7 +108,7 @@
     }
 
     .fila-item .badge-ponderador {
-        background: var(--crema);
+        background: #fff;
         color: var(--cafe);
         font-size: 11px;
         font-weight: 500;
@@ -119,13 +131,18 @@
         {% for persona in personas %}
         <div class="col-md-6">
             <div class="persona-card">
-                <div class="persona-nombre">{{ persona.nombre }}</div>
-                <div class="persona-cargo">{{ persona.cargo }} · {{ persona.delegacion }}</div>
+                <div class="persona-encabezado">
+                    <img src="{% static 'img/usuario.png' %}" alt="Avatar de {{ persona.nombre }}" class="persona-avatar">
+                    <div>
+                        <div class="persona-nombre">{{ persona.nombre }}</div>
+                        <div class="persona-cargo">{{ persona.cargo }} · {{ persona.delegacion }}</div>
+                    </div>
+                </div>
 
                 <hr>
 
                 {% for item in persona.items %}
-                <div class="fila-item">
+                <div class="fila-item" style="background: {% if item.semaforo == 'verde' %}#E8F3E9{% elif item.semaforo == 'ambar' %}#FBF0DE{% else %}#FCEAEA{% endif %};">
                     <span class="nombre-item">{{ item.nombre }}</span>
                     <span class="valores">{{ item.avance }} / {{ item.meta }}</span>
                     <span class="badge-ponderador">Pond. {{ item.ponderador }}</span>

@@ -1,0 +1,101 @@
+EVIDENCIA DE USO DE INTELIGENCIA ARTIFICIAL
+Proyecto: Sistema MUN - Indicadores de gestión (SGR)
+Herramienta utilizada: Claude (Anthropic) - asistente de IA generativa vía Claude Code
+
+--------------------------------------------------------------------------------
+1. DESCRIPCIÓN GENERAL DE USO
+--------------------------------------------------------------------------------
+
+Se utilizó Claude como apoyo durante el desarrollo del proyecto en dos frentes
+principales:
+
+  a) Diseño y mejora de la interfaz de usuario (estilos con Bootstrap, tarjetas
+     de indicadores, colores del semáforo de avance, layout de los paneles
+     personal, de equipo y de configuración de metas).
+
+  b) Entendimiento de cómo trabajar con un array/lista de diccionarios en
+     Python (la variable `personas` de datosarray.py) para resolver el tema
+     de permisos: decidir qué plantilla y qué opciones de navegación se
+     muestran a cada usuario según su rol (delegado, coordinador,
+     administrador, funcionario, verificador, consulta).
+
+--------------------------------------------------------------------------------
+2. PROMPTS UTILIZADOS Y RESPUESTAS OBTENIDAS
+--------------------------------------------------------------------------------
+
+Prompt 1 (diseño de interfaz):
+  "Tengo esta vista de Django que muestra las actividades de cada persona con
+  meta, avance y ponderador. Quiero mostrarlo con Bootstrap en tarjetas
+  prolijas, con un color de fondo distinto según si el avance está bien
+  (verde), regular (ámbar) o mal (rojo). ¿Cómo lo armo en el template?"
+
+  Respuesta / orientación recibida:
+  Claude sugirió usar clases de tarjeta (`card`) con un color de fondo
+  condicional según un campo `semaforo` calculado en la vista, usar
+  `{% if %}/{% elif %}/{% else %}` dentro del atributo `style` del contenedor
+  de cada actividad, y separar los estilos repetidos en un bloque `<style>`
+  con variables CSS (`:root { --verde: ...; --ambar: ...; --rojo: ... }`)
+  para no repetir colores en cada template.
+
+  Cómo se incorporó:
+  Se aplicó ese patrón en dashboard.html e indicador.html: cada fila de
+  actividad pinta su fondo según `item.semaforo` / `tareas.semaforo`, y se
+  usó una barra de progreso (`col-barra` / `relleno`) con el ancho calculado
+  mediante `{% widthratio avance meta 100 %}` para representar el % de
+  cumplimiento visualmente.
+
+Prompt 2 (permisos según rol usando el array):
+  "Tengo un array de personas, cada una con un campo 'rol' (delegado,
+  coordinador, administrador, funcionario, verificador, consulta). Según el
+  rol quiero mostrar un template distinto (uno para jefaturas con resumen de
+  equipo, otro para funcionarios con su propio avance) y también esconder o
+  mostrar links en el menú de navegación. ¿Cómo recorro el array para separar
+  esos casos sin repetir código?"
+
+  Respuesta / orientación recibida:
+  Claude explicó que, al ser un array de diccionarios, se puede filtrar con
+  una condición simple (`if rol in ['delegado', 'coordinador',
+  'administrador']`) para decidir qué vista/template renderizar desde la
+  función de la vista (`views.py`), en vez de poner esa lógica en el
+  template. Y que en el template base (main.html), compartido por todas las
+  páginas, basta con comparar la variable `rol` que llega en el contexto
+  (`{% if rol == "administrador" or rol == "coordinador" %}`) para
+  mostrar/ocultar cada `<li>` del menú, sin duplicar el menú por rol.
+
+  Cómo se incorporó:
+  En views.py, la función `landing` recorre el array `personas`, ubica a la
+  persona actual y usa su `rol` para decidir si renderiza
+  `landing_monitor.html` (jefaturas, con resumen de los peores promedios del
+  equipo) o `landinginterno.html` (funcionario, con sus propias actividades).
+  En main.html se usa esa misma variable `rol` para mostrar u ocultar los
+  links "Progreso" vs "Mi progreso" y "Configurar metas" (solo visible para
+  administrador/coordinador).
+
+Prompt 3 (migración de datos a JSON):
+  "Necesito que la información deje de estar hardcodeada como diccionarios de
+  Python y pase a un archivo .json, pero sin tener que tocar el resto del
+  proyecto que ya importa 'periodo' y 'personas' desde datosarray.py."
+
+  Respuesta / orientación recibida:
+  Claude propuso mantener datosarray.py como punto de entrada, pero que en
+  vez de definir los diccionarios directamente, use `json.load()` para leer
+  un archivo datosarray.json ubicado en la misma carpeta (con
+  `Path(__file__).resolve().parent`), y exponga las mismas variables
+  `periodo` y `personas` para no romper ningún import existente.
+
+  Cómo se incorporó:
+  Se creó datosarray.json con la misma información, se dejó una copia del
+  archivo original en datosarray_backup.py, y datosarray.py ahora solo
+  contiene la lógica de carga del JSON.
+
+--------------------------------------------------------------------------------
+3. RESUMEN
+--------------------------------------------------------------------------------
+
+El uso de IA se concentró en resolver dudas puntuales de implementación
+(cómo estructurar condicionales de rol sin duplicar templates, cómo separar
+estilos de Bootstrap por estado del semáforo, y cómo migrar datos a JSON
+manteniendo compatibilidad), no en generar el proyecto completo. Las
+decisiones de qué mostrar a cada rol y la estructura de datos del array
+fueron definidas por el estudiante; la IA aportó la forma de implementarlas
+en Django/Bootstrap.

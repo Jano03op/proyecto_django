@@ -1,112 +1,17 @@
 # datosarray.py
+#
+# Los datos ya no viven hardcodeados aquí: se leen desde datosarray.json
+# (requisito de la evaluación: la información debe almacenarse en archivo(s) JSON).
+# Se conservan los nombres `periodo` y `personas` para no tener que tocar
+# ninguna otra parte del proyecto que ya los importa.
 
-periodo = {
-    "inicio": "2026-07-01",
-    "termino": "2026-09-30",
-}
+import json
+from pathlib import Path
 
-personas = [
-    {
-        "nombre": "Elizabeth Villanueva",
-        "cargo": "Delegada",
-        "rol": "delegado",
-        "delegacion": "La Antena",
-        "items": [
-            {"nombre": "Atención de usuario", "meta": 55, "avance": 13, "ponderador": 10},
-            {"nombre": "Visitas y reuniones", "meta": 24, "avance": 3, "ponderador": 15},
-            {"nombre": "Gestión de talleres", "meta": 8, "avance": 6, "ponderador": 30},
-            {"nombre": "Orientación telefónica", "meta": 40, "avance": 38, "ponderador": 10},
-            {"nombre": "Coordinación con Gore", "meta": 15, "avance": 2, "ponderador": 20},
-            {"nombre": "Solicitudes de poda", "meta": 20, "avance": 20, "ponderador": 10},
-            {"nombre": "Ingreso a agenda colectiva", "meta": 30, "avance": 27, "ponderador": 15},
-            {"nombre": "Acompañamiento a organizaciones", "meta": 10, "avance": 1, "ponderador": 25},
-            {"nombre": "Reuniones con juntas de vecinos", "meta": 12, "avance": 11, "ponderador": 15},
-            {"nombre": "Seguimiento de subvenciones", "meta": 18, "avance": 4, "ponderador": 20},
-        ],
-    },
-    {
-        "nombre": "Pablo Cuadra Corrales",
-        "cargo": "Encargado",
-        "rol": "funcionario",
-        "delegacion": "Las Compañías",
-        "items": [
-            {"nombre": "Atención de usuario", "meta": 40, "avance": 22, "ponderador": 20},
-            {"nombre": "Gestión comunitaria", "meta": 10, "avance": 9, "ponderador": 25},
-            {"nombre": "Operativos sociales", "meta": 15, "avance": 6, "ponderador": 20},
-            {"nombre": "Acceso a programas", "meta": 20, "avance": 18, "ponderador": 15},
-            {"nombre": "Actividades territoriales", "meta": 12, "avance": 3, "ponderador": 20},
-        ],
-    },
-    {
-        "nombre": "María Soledad Rojas",
-        "cargo": "Encargada",
-        "rol": "funcionario",
-        "delegacion": "La Pampa",
-        "items": [
-            {"nombre": "Orientación de subsidios", "meta": 30, "avance": 30, "ponderador": 20},
-            {"nombre": "Visitas y reuniones", "meta": 18, "avance": 5, "ponderador": 15},
-            {"nombre": "Gestión de aseo y alumbrado", "meta": 25, "avance": 20, "ponderador": 20},
-            {"nombre": "Apoyo a organizaciones", "meta": 14, "avance": 2, "ponderador": 25},
-            {"nombre": "Servicios comunitarios", "meta": 10, "avance": 9, "ponderador": 20},
-        ],
-    },
-    {
-        "nombre": "Rodrigo Fuenzalida Vásquez",
-        "cargo": "Encargado",
-        "rol": "funcionario",
-        "delegacion": "Avenida del Mar",
-        "items": [
-            {"nombre": "Coordinación estacional", "meta": 20, "avance": 4, "ponderador": 25},
-            {"nombre": "Atención de usuario", "meta": 45, "avance": 41, "ponderador": 15},
-            {"nombre": "Vinculación con comercio", "meta": 16, "avance": 15, "ponderador": 20},
-            {"nombre": "Seguridad y prevención", "meta": 10, "avance": 1, "ponderador": 20},
-            {"nombre": "Servicios turísticos", "meta": 12, "avance": 7, "ponderador": 20},
-        ],
-    },
-    {
-        "nombre": "Manuel Barraza Delgado",
-        "cargo": "Encargado",
-        "rol": "funcionario",
-        "delegacion": "Rural",
-        "items": [
-            {"nombre": "Acercamiento de servicios", "meta": 12, "avance": 2, "ponderador": 30},
-            {"nombre": "Coordinación intersectorial", "meta": 8, "avance": 1, "ponderador": 20},
-            {"nombre": "Apoyo a organizaciones rurales", "meta": 10, "avance": 8, "ponderador": 20},
-            {"nombre": "Conectividad territorial", "meta": 6, "avance": 6, "ponderador": 15},
-            {"nombre": "Levantamiento de necesidades", "meta": 14, "avance": 3, "ponderador": 15},
-        ],
-    },
-    {
-        "nombre": "Alan Von Kretschmann",
-        "cargo": "Coordinador",
-        "rol": "coordinador",
-        "delegacion": "Centro",
-        "items": [],
-    },
-    {
-        "nombre": "Daniela Norambuena Borgheresi",
-        "cargo": "Alcaldesa",
-        "rol": "administrador",
-        "delegacion": "Municipalidad",
-        "items": [],
-    },
-    {
-        "nombre": "Verificador de Evidencias",
-        "cargo": "Verificador",
-        "rol": "verificador",
-        "delegacion": "Centro",
-        "items": [
-            {"nombre": "Revisión de evidencias pendientes", "meta": 20, "avance": 14, "ponderador": 50},
-            {"nombre": "Aprobación de actividades", "meta": 18, "avance": 17, "ponderador": 50},
-        ],
-    },
-    {
-        "nombre": "Usuario de Consulta",
-        "cargo": "Consulta",
-        "rol": "consulta",
-        "delegacion": "Centro",
-        "items": [
-            {"nombre": "Revisión de tableros", "meta": 5, "avance": 5, "ponderador": 100},
-        ],
-    },
-]
+_DATA_PATH = Path(__file__).resolve().parent / "datosarray.json"
+
+with open(_DATA_PATH, encoding="utf-8") as _archivo:
+    _datos = json.load(_archivo)
+
+periodo = _datos["periodo"]
+personas = _datos["personas"]
